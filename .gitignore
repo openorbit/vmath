@@ -1,0 +1,11 @@
+build
+vmath.xcodeproj/*.mode1v3
+vmath.xcodeproj/*.pbxuser
+vmath.xcodeproj/*.perspective
+*~
+.DS_Store
+xcuserdata
+deps/*
+*.bak
+*.orig
+

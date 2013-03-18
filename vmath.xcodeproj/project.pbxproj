@@ -1,0 +1,404 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		ECE73AC216F700AC00A4662C /* lwcoord.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73AB516F700AC00A4662C /* lwcoord.h */; };
+		ECE73AC316F700AC00A4662C /* vmath-constants.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73AB616F700AC00A4662C /* vmath-constants.h */; };
+		ECE73AC416F700AC00A4662C /* vmath-convert.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73AB716F700AC00A4662C /* vmath-convert.h */; };
+		ECE73AC516F700AC00A4662C /* vmath-cubemap.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73AB816F700AC00A4662C /* vmath-cubemap.h */; };
+		ECE73AC616F700AC00A4662C /* vmath-fixed.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73AB916F700AC00A4662C /* vmath-fixed.h */; };
+		ECE73AC716F700AC00A4662C /* vmath-geo.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73ABA16F700AC00A4662C /* vmath-geo.h */; };
+		ECE73AC816F700AC00A4662C /* vmath-integer.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73ABB16F700AC00A4662C /* vmath-integer.h */; };
+		ECE73AC916F700AC00A4662C /* vmath-matvec.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73ABC16F700AC00A4662C /* vmath-matvec.h */; };
+		ECE73ACA16F700AC00A4662C /* vmath-quaternions.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73ABE16F700AC00A4662C /* vmath-quaternions.h */; };
+		ECE73ACB16F700AC00A4662C /* vmath-types.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73AC016F700AC00A4662C /* vmath-types.h */; };
+		ECE73ACC16F700AC00A4662C /* vmath.h in Headers */ = {isa = PBXBuildFile; fileRef = ECE73AC116F700AC00A4662C /* vmath.h */; };
+		ECE73AD316F700BE00A4662C /* lwcoord.c in Sources */ = {isa = PBXBuildFile; fileRef = ECE73ACD16F700BE00A4662C /* lwcoord.c */; };
+		ECE73AD416F700BE00A4662C /* vmath-convert.c in Sources */ = {isa = PBXBuildFile; fileRef = ECE73ACE16F700BE00A4662C /* vmath-convert.c */; };
+		ECE73AD516F700BE00A4662C /* vmath-cubemap.c in Sources */ = {isa = PBXBuildFile; fileRef = ECE73ACF16F700BE00A4662C /* vmath-cubemap.c */; };
+		ECE73AD616F700BE00A4662C /* vmath-geo.c in Sources */ = {isa = PBXBuildFile; fileRef = ECE73AD016F700BE00A4662C /* vmath-geo.c */; };
+		ECE73AD716F700BE00A4662C /* vmath-matvec.c in Sources */ = {isa = PBXBuildFile; fileRef = ECE73AD116F700BE00A4662C /* vmath-matvec.c */; };
+		ECE73AD816F700BE00A4662C /* vmath-quaternions.c in Sources */ = {isa = PBXBuildFile; fileRef = ECE73AD216F700BE00A4662C /* vmath-quaternions.c */; };
+		ECE73AE816F7014B00A4662C /* math-test.c in Sources */ = {isa = PBXBuildFile; fileRef = ECE73AE716F7014B00A4662C /* math-test.c */; };
+		ECE73AE916F7016600A4662C /* libvmath.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECE73AAB16F7002D00A4662C /* libvmath.a */; };
+		ECE73AEB16F701A200A4662C /* libcheck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECE73AEA16F701A200A4662C /* libcheck.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		ECE73ADC16F7012600A4662C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		ECE73AAB16F7002D00A4662C /* libvmath.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvmath.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECE73AB516F700AC00A4662C /* lwcoord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lwcoord.h; sourceTree = "<group>"; };
+		ECE73AB616F700AC00A4662C /* vmath-constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vmath-constants.h"; sourceTree = "<group>"; };
+		ECE73AB716F700AC00A4662C /* vmath-convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vmath-convert.h"; sourceTree = "<group>"; };
+		ECE73AB816F700AC00A4662C /* vmath-cubemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vmath-cubemap.h"; sourceTree = "<group>"; };
+		ECE73AB916F700AC00A4662C /* vmath-fixed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vmath-fixed.h"; sourceTree = "<group>"; };
+		ECE73ABA16F700AC00A4662C /* vmath-geo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vmath-geo.h"; sourceTree = "<group>"; };
+		ECE73ABB16F700AC00A4662C /* vmath-integer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vmath-integer.h"; sourceTree = "<group>"; };
+		ECE73ABC16F700AC00A4662C /* vmath-matvec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vmath-matvec.h"; sourceTree = "<group>"; };
+		ECE73ABD16F700AC00A4662C /* vmath-matvec.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "vmath-matvec.inl"; sourceTree = "<group>"; };
+		ECE73ABE16F700AC00A4662C /* vmath-quaternions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vmath-quaternions.h"; sourceTree = "<group>"; };
+		ECE73ABF16F700AC00A4662C /* vmath-quaternions.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "vmath-quaternions.inl"; sourceTree = "<group>"; };
+		ECE73AC016F700AC00A4662C /* vmath-types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vmath-types.h"; sourceTree = "<group>"; };
+		ECE73AC116F700AC00A4662C /* vmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vmath.h; sourceTree = "<group>"; };
+		ECE73ACD16F700BE00A4662C /* lwcoord.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lwcoord.c; sourceTree = "<group>"; };
+		ECE73ACE16F700BE00A4662C /* vmath-convert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "vmath-convert.c"; sourceTree = "<group>"; };
+		ECE73ACF16F700BE00A4662C /* vmath-cubemap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "vmath-cubemap.c"; sourceTree = "<group>"; };
+		ECE73AD016F700BE00A4662C /* vmath-geo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "vmath-geo.c"; sourceTree = "<group>"; };
+		ECE73AD116F700BE00A4662C /* vmath-matvec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "vmath-matvec.c"; sourceTree = "<group>"; };
+		ECE73AD216F700BE00A4662C /* vmath-quaternions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "vmath-quaternions.c"; sourceTree = "<group>"; };
+		ECE73ADE16F7012600A4662C /* vmath-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "vmath-test"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECE73AE716F7014B00A4662C /* math-test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "math-test.c"; sourceTree = "<group>"; };
+		ECE73AEA16F701A200A4662C /* libcheck.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcheck.a; path = ../../../../../../opt/local/lib/libcheck.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		ECE73AA816F7002D00A4662C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ECE73ADB16F7012600A4662C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECE73AEB16F701A200A4662C /* libcheck.a in Frameworks */,
+				ECE73AE916F7016600A4662C /* libvmath.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		ECE73AA216F7002D00A4662C = {
+			isa = PBXGroup;
+			children = (
+				ECE73AEA16F701A200A4662C /* libcheck.a */,
+				ECE73AB316F7003C00A4662C /* include */,
+				ECE73AB216F7003500A4662C /* src */,
+				ECE73AD916F700D000A4662C /* tests */,
+				ECE73AAC16F7002D00A4662C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		ECE73AAC16F7002D00A4662C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ECE73AAB16F7002D00A4662C /* libvmath.a */,
+				ECE73ADE16F7012600A4662C /* vmath-test */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ECE73AB216F7003500A4662C /* src */ = {
+			isa = PBXGroup;
+			children = (
+				ECE73ACD16F700BE00A4662C /* lwcoord.c */,
+				ECE73ACE16F700BE00A4662C /* vmath-convert.c */,
+				ECE73ACF16F700BE00A4662C /* vmath-cubemap.c */,
+				ECE73AD016F700BE00A4662C /* vmath-geo.c */,
+				ECE73AD116F700BE00A4662C /* vmath-matvec.c */,
+				ECE73AD216F700BE00A4662C /* vmath-quaternions.c */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		ECE73AB316F7003C00A4662C /* include */ = {
+			isa = PBXGroup;
+			children = (
+				ECE73AB416F7004500A4662C /* vmath */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		ECE73AB416F7004500A4662C /* vmath */ = {
+			isa = PBXGroup;
+			children = (
+				ECE73AC116F700AC00A4662C /* vmath.h */,
+				ECE73AB516F700AC00A4662C /* lwcoord.h */,
+				ECE73AB616F700AC00A4662C /* vmath-constants.h */,
+				ECE73AB716F700AC00A4662C /* vmath-convert.h */,
+				ECE73AB816F700AC00A4662C /* vmath-cubemap.h */,
+				ECE73AB916F700AC00A4662C /* vmath-fixed.h */,
+				ECE73ABA16F700AC00A4662C /* vmath-geo.h */,
+				ECE73ABB16F700AC00A4662C /* vmath-integer.h */,
+				ECE73ABC16F700AC00A4662C /* vmath-matvec.h */,
+				ECE73ABD16F700AC00A4662C /* vmath-matvec.inl */,
+				ECE73ABE16F700AC00A4662C /* vmath-quaternions.h */,
+				ECE73ABF16F700AC00A4662C /* vmath-quaternions.inl */,
+				ECE73AC016F700AC00A4662C /* vmath-types.h */,
+			);
+			path = vmath;
+			sourceTree = "<group>";
+		};
+		ECE73AD916F700D000A4662C /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				ECE73AE716F7014B00A4662C /* math-test.c */,
+			);
+			path = tests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		ECE73AA916F7002D00A4662C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECE73AC216F700AC00A4662C /* lwcoord.h in Headers */,
+				ECE73AC316F700AC00A4662C /* vmath-constants.h in Headers */,
+				ECE73AC416F700AC00A4662C /* vmath-convert.h in Headers */,
+				ECE73AC516F700AC00A4662C /* vmath-cubemap.h in Headers */,
+				ECE73AC616F700AC00A4662C /* vmath-fixed.h in Headers */,
+				ECE73AC716F700AC00A4662C /* vmath-geo.h in Headers */,
+				ECE73AC816F700AC00A4662C /* vmath-integer.h in Headers */,
+				ECE73AC916F700AC00A4662C /* vmath-matvec.h in Headers */,
+				ECE73ACA16F700AC00A4662C /* vmath-quaternions.h in Headers */,
+				ECE73ACB16F700AC00A4662C /* vmath-types.h in Headers */,
+				ECE73ACC16F700AC00A4662C /* vmath.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		ECE73AAA16F7002D00A4662C /* vmath */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ECE73AAF16F7002D00A4662C /* Build configuration list for PBXNativeTarget "vmath" */;
+			buildPhases = (
+				ECE73AA716F7002D00A4662C /* Sources */,
+				ECE73AA816F7002D00A4662C /* Frameworks */,
+				ECE73AA916F7002D00A4662C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = vmath;
+			productName = vmath;
+			productReference = ECE73AAB16F7002D00A4662C /* libvmath.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		ECE73ADD16F7012600A4662C /* vmath-test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ECE73AE416F7012600A4662C /* Build configuration list for PBXNativeTarget "vmath-test" */;
+			buildPhases = (
+				ECE73ADA16F7012600A4662C /* Sources */,
+				ECE73ADB16F7012600A4662C /* Frameworks */,
+				ECE73ADC16F7012600A4662C /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "vmath-test";
+			productName = "vmath-test";
+			productReference = ECE73ADE16F7012600A4662C /* vmath-test */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		ECE73AA316F7002D00A4662C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Open Orbit";
+			};
+			buildConfigurationList = ECE73AA616F7002D00A4662C /* Build configuration list for PBXProject "vmath" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = ECE73AA216F7002D00A4662C;
+			productRefGroup = ECE73AAC16F7002D00A4662C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				ECE73AAA16F7002D00A4662C /* vmath */,
+				ECE73ADD16F7012600A4662C /* vmath-test */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		ECE73AA716F7002D00A4662C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECE73AD316F700BE00A4662C /* lwcoord.c in Sources */,
+				ECE73AD416F700BE00A4662C /* vmath-convert.c in Sources */,
+				ECE73AD516F700BE00A4662C /* vmath-cubemap.c in Sources */,
+				ECE73AD616F700BE00A4662C /* vmath-geo.c in Sources */,
+				ECE73AD716F700BE00A4662C /* vmath-matvec.c in Sources */,
+				ECE73AD816F700BE00A4662C /* vmath-quaternions.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ECE73ADA16F7012600A4662C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECE73AE816F7014B00A4662C /* math-test.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		ECE73AAD16F7002D00A4662C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		ECE73AAE16F7002D00A4662C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		ECE73AB016F7002D00A4662C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		ECE73AB116F7002D00A4662C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		ECE73AE516F7012600A4662C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					"${PROJECT_DIR}/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		ECE73AE616F7012600A4662C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					"${PROJECT_DIR}/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		ECE73AA616F7002D00A4662C /* Build configuration list for PBXProject "vmath" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ECE73AAD16F7002D00A4662C /* Debug */,
+				ECE73AAE16F7002D00A4662C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ECE73AAF16F7002D00A4662C /* Build configuration list for PBXNativeTarget "vmath" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ECE73AB016F7002D00A4662C /* Debug */,
+				ECE73AB116F7002D00A4662C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ECE73AE416F7012600A4662C /* Build configuration list for PBXNativeTarget "vmath-test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ECE73AE516F7012600A4662C /* Debug */,
+				ECE73AE616F7012600A4662C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = ECE73AA316F7002D00A4662C /* Project object */;
+}

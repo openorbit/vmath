@@ -1,0 +1,12 @@
+Libvmath was developed by Mattias Holm (lorrden at openorbit dot org).
+
+Libvmath is primarily a vector maths library, it implements many different
+vector and matrix routines. It also provides types and functions for working
+with "large world coordinates", a hybrid integer / floating point coordinate
+mechanism that ensures similar precision independent on how far from the origin
+the coordinate is.
+
+There are two ways to compile the library, either with the Xcode project file or
+using the CMake build system.
+
+Documentation is lacking at the moment, but it will be added later on.
