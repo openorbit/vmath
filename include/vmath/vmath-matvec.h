@@ -763,6 +763,16 @@ void mf3_zxz_rotmatrix(float3x3 R, float asc_node, float incl, float arg_peri);
    */
   int vd3_octant(double3 a, double3 b);
 
+  /*!
+   * Compute center point of octant given a center coordinate and a side length.
+   *
+   * Useful for splitting octtrees and similar.
+   */
+  float3 vf3_octant_split(float3 a, float side, int octant);
+  double3 vd3_octant_split(double3 a, double side, int octant);
+
+
+
 #ifdef __cplusplus
 }
 #endif

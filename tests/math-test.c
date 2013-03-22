@@ -449,6 +449,31 @@ START_TEST(test_el_cs_area)
 }
 END_TEST
 
+
+START_TEST(test_octant)
+{
+  fail_unless(vd3_octant(vd3_set(0.0, 0.0, 0.0), vd3_set(1.0, 1.0, 1.0)) == 0);
+  fail_unless(vd3_octant(vd3_set(0.0, 0.0, 0.0), vd3_set(-1.0, 1.0, 1.0)) == 1);
+  fail_unless(vd3_octant(vd3_set(0.0, 0.0, 0.0), vd3_set(-1.0, -1.0, 1.0)) == 3);
+  fail_unless(vd3_octant(vd3_set(0.0, 0.0, 0.0), vd3_set(1.0, -1.0, 1.0)) == 2);
+  fail_unless(vd3_octant(vd3_set(0.0, 0.0, 0.0), vd3_set(1.0, 1.0, -1.0)) == 4);
+  fail_unless(vd3_octant(vd3_set(0.0, 0.0, 0.0), vd3_set(-1.0, 1.0, -1.0)) == 5);
+  fail_unless(vd3_octant(vd3_set(0.0, 0.0, 0.0), vd3_set(-1.0, -1.0, -1.0)) == 7);
+  fail_unless(vd3_octant(vd3_set(0.0, 0.0, 0.0), vd3_set(1.0, -1.0, -1.0)) == 6);
+}
+END_TEST
+
+
+START_TEST(test_split_octant)
+{
+  double3 res = vd3_octant_split(vd3_set(0.0, 0.0, 0.0), 2.0, 0);
+  fail_unless(ALMOST_EQUAL(res.x, 0.5, 0.000000001), "x: %f != 0.5", res.x);
+  fail_unless(ALMOST_EQUAL(res.y, 0.5, 0.000000001), "y: %f != 0.5", res.y);
+  fail_unless(ALMOST_EQUAL(res.z, 0.5, 0.000000001), "z: %f != 0.5", res.z);
+
+}
+END_TEST
+
 Suite
 *test_suite(int argc, const char *argv[argc])
 {
@@ -486,6 +511,10 @@ Suite
 
   /* Ellipse functions */
   tcase_add_test(tc_core, test_el_cs_area);
+
+  /* Octant functions */
+  tcase_add_test(tc_core, test_octant);
+  tcase_add_test(tc_core, test_split_octant);
 
   suite_add_tcase(s, tc_core);
 

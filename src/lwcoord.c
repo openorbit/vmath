@@ -195,18 +195,7 @@ lwc_octant(const lwcoord_t *a, const lwcoord_t * b)
   float3 rel = lwc_dist(b, a);
 
   int octant = 0;
-  if (rel.x >= 0.0) {
-    octant += 1;
-  }
-
-  if (rel.y >= 0.0) {
-    octant += 2;
-  }
-
-  if (rel.z >= 0.0) {
-    octant += 4;
-  }
-
+  octant = vf3_octant(vf3_set(0, 0, 0), rel);
   return octant;
 }
 

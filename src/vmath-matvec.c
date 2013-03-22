@@ -1100,17 +1100,9 @@ vf3_octant(float3 a, float3 b)
   float3 rel = b - a;
 
   int octant = 0;
-  if (rel.x >= 0.0) {
-    octant += 1;
-  }
-
-  if (rel.y >= 0.0) {
-    octant += 2;
-  }
-
-  if (rel.z >= 0.0) {
-    octant += 4;
-  }
+  octant = signbit(rel.x) << 0
+         | signbit(rel.y) << 1
+         | signbit(rel.z) << 2;
 
   return octant;
 }
@@ -1121,22 +1113,36 @@ vd3_octant(double3 a, double3 b)
   double3 rel = b - a;
 
   int octant = 0;
-  if (rel.x >= 0.0) {
-    octant += 1;
-  }
-
-  if (rel.y >= 0.0) {
-    octant += 2;
-  }
-
-  if (rel.z >= 0.0) {
-    octant += 4;
-  }
+  octant = signbit(rel.x) << 0
+         | signbit(rel.y) << 1
+         | signbit(rel.z) << 2;
 
   return octant;
 }
 
+float3
+vf3_octant_split(float3 a, float side, int octant)
+{
+  float3 res;
+
+  res.x = a.x + side/4.0 - side/2.0 * (octant & 1);
+  res.y = a.y + side/4.0 - side/2.0 * ((octant & 2) >> 1);
+  res.z = a.z + side/4.0 - side/2.0 * ((octant & 4) >> 2);
+
+  return res;
+}
 
 
+double3
+vd3_octant_split(double3 a, double side, int octant)
+{
+  double3 res;
+
+  res.x = a.x + side/4.0 - side/2.0 * (octant & 1);
+  res.y = a.y + side/4.0 - side/2.0 * ((octant & 2) >> 1);
+  res.z = a.z + side/4.0 - side/2.0 * ((octant & 4) >> 2);
+
+  return res;
+}
 
 
