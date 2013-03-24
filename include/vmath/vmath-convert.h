@@ -74,6 +74,16 @@ v3l_to_v3d(long3 lv)
   return res;
 }
 
+static inline float3
+v3l_to_v3f(long3 lv)
+{
+  float3 res = vf3_set((float)v3l_get(lv, 0),
+                       (float)v3l_get(lv, 1),
+                       (float)v3l_get(lv, 2));
+  return res;
+}
+
+
 
 float3 equ2cart_f(float ra, float dec);
 double3 equ2cart_d(double ra, double dec);
