@@ -474,6 +474,159 @@ START_TEST(test_split_octant)
 }
 END_TEST
 
+
+START_TEST(test_cube_sphere_map)
+{
+  // Cube sphere mapping test data. Center points for each cube face are
+  // supposed to be mapped to identical coordinates.
+  // The side centers can easily be computed using spherical to rectangular
+  // coordinate mappings.
+  // Is there an easy way to compute the corners?
+
+  float3 testdata[][2] = {
+    // Center points on each side
+    {{ 1.0,  0.0,  0.0}, { 1.0,  0.0,  0.0}},
+    {{-1.0,  0.0,  0.0}, {-1.0,  0.0,  0.0}},
+    {{ 0.0,  1.0,  0.0}, { 0.0,  1.0,  0.0}},
+    {{ 0.0, -1.0,  0.0}, { 0.0, -1.0,  0.0}},
+    {{ 0.0,  0.0,  1.0}, { 0.0,  0.0,  1.0}},
+    {{ 0.0,  0.0, -1.0}, { 0.0,  0.0, -1.0}},
+
+    // Center up, low and right points on each face
+
+    // Front +x face
+    {{ 1.0,  0.0,  1.0}, {sin(M_PI_4)*cos(0),
+      sin(M_PI_4)*sin(0),
+      cos(M_PI_4)}},
+    {{ 1.0,  0.0, -1.0}, {sin(3.0*M_PI_4)*cos(0),
+      sin(3.0*M_PI_4)*sin(0),
+      cos(3.0*M_PI_4)}},
+    {{ 1.0,  1.0,  0.0}, {sin(M_PI_2)*cos(M_PI_4),
+      sin(M_PI_2)*sin(M_PI_4),
+      cos(M_PI_2)}},
+
+    // +y face
+    {{ 0.0,  1.0,  1.0}, {sin(M_PI_4)*cos(M_PI_2),
+      sin(M_PI_4)*sin(M_PI_2),
+      cos(M_PI_4)}},
+    {{ 0.0,  1.0, -1.0}, {sin(3.0*M_PI_4)*cos(M_PI_2),
+      sin(3.0*M_PI_4)*sin(M_PI_2),
+      cos(3.0*M_PI_4)}},
+    {{-1.0,  1.0,  0.0}, {sin(M_PI_2)*cos(M_PI_2+M_PI_4),
+      sin(M_PI_2)*sin(M_PI_2+M_PI_4),
+      cos(M_PI_2)}},
+
+
+    // -x face
+    {{-1.0,  0.0,  1.0}, {sin(M_PI_4)*cos(M_PI),
+      sin(M_PI_4)*sin(M_PI),
+      cos(M_PI_4)}},
+    {{-1.0,  0.0, -1.0}, {sin(3.0*M_PI_4)*cos(M_PI),
+      sin(3.0*M_PI_4)*sin(M_PI),
+      cos(3.0*M_PI_4)}},
+    {{-1.0, -1.0,  0.0}, {sin(M_PI_2)*cos(M_PI+M_PI_4),
+      sin(M_PI_2)*sin(M_PI+M_PI_4),
+      cos(M_PI_2)}},
+
+    // -y face
+    {{ 0.0, -1.0,  1.0}, {sin(M_PI_4)*cos(M_PI+M_PI_2),
+      sin(M_PI_4)*sin(M_PI+M_PI_2),
+      cos(M_PI_4)}},
+    {{ 0.0, -1.0, -1.0}, {sin(3.0*M_PI_4)*cos(M_PI+M_PI_2),
+      sin(3.0*M_PI_4)*sin(M_PI+M_PI_2),
+      cos(3.0*M_PI_4)}},
+    {{ 1.0, -1.0,  0.0}, {sin(M_PI_2)*cos(M_PI+M_PI_2+M_PI_4),
+      sin(M_PI_2)*sin(M_PI+M_PI_2+M_PI_4),
+      cos(M_PI_2)}},
+
+  };
+
+  for (int i = 0 ; i < sizeof(testdata)/sizeof(testdata[0]) ; i ++) {
+    float3 res = v3f_cube_sphere_map(testdata[i][0]);
+    fail_unless(ALMOST_EQUAL(res.x, testdata[i][1].x, 0.00000001),
+                "[%d].x: %f != %f", i, res.x, testdata[i][1].x);
+    fail_unless(ALMOST_EQUAL(res.y, testdata[i][1].y, 0.00000001),
+                "[%d].y: %f != %f", i, res.y, testdata[i][1].y);
+    fail_unless(ALMOST_EQUAL(res.z, testdata[i][1].z, 0.00000001),
+                "[%d].z: %f != %f", i, res.z, testdata[i][1].z);
+  }
+}
+END_TEST
+
+START_TEST(test_sphere_cube_map)
+{
+  // Same test data as for test_cube_sphere_map, only the reverse mapping
+  // is tested.
+  float3 testdata[][2] = {
+    // Center points on each side
+    {{ 1.0,  0.0,  0.0}, { 1.0,  0.0,  0.0}},
+    {{-1.0,  0.0,  0.0}, {-1.0,  0.0,  0.0}},
+    {{ 0.0,  1.0,  0.0}, { 0.0,  1.0,  0.0}},
+    {{ 0.0, -1.0,  0.0}, { 0.0, -1.0,  0.0}},
+    {{ 0.0,  0.0,  1.0}, { 0.0,  0.0,  1.0}},
+    {{ 0.0,  0.0, -1.0}, { 0.0,  0.0, -1.0}},
+
+    // Center up, low and right points on each face
+
+    // Front +x face
+    {{ 1.0,  0.0,  1.0}, {sin(M_PI_4)*cos(0),
+      sin(M_PI_4)*sin(0),
+      cos(M_PI_4)}},
+    {{ 1.0,  0.0, -1.0}, {sin(3.0*M_PI_4)*cos(0),
+      sin(3.0*M_PI_4)*sin(0),
+      cos(3.0*M_PI_4)}},
+    {{ 1.0,  1.0,  0.0}, {sin(M_PI_2)*cos(M_PI_4),
+      sin(M_PI_2)*sin(M_PI_4),
+      cos(M_PI_2)}},
+
+    // +y face
+    {{ 0.0,  1.0,  1.0}, {sin(M_PI_4)*cos(M_PI_2),
+      sin(M_PI_4)*sin(M_PI_2),
+      cos(M_PI_4)}},
+    {{ 0.0,  1.0, -1.0}, {sin(3.0*M_PI_4)*cos(M_PI_2),
+      sin(3.0*M_PI_4)*sin(M_PI_2),
+      cos(3.0*M_PI_4)}},
+    {{-1.0,  1.0,  0.0}, {sin(M_PI_2)*cos(M_PI_2+M_PI_4),
+      sin(M_PI_2)*sin(M_PI_2+M_PI_4),
+      cos(M_PI_2)}},
+
+
+    // -x face
+    {{-1.0,  0.0,  1.0}, {sin(M_PI_4)*cos(M_PI),
+      sin(M_PI_4)*sin(M_PI),
+      cos(M_PI_4)}},
+    {{-1.0,  0.0, -1.0}, {sin(3.0*M_PI_4)*cos(M_PI),
+      sin(3.0*M_PI_4)*sin(M_PI),
+      cos(3.0*M_PI_4)}},
+    {{-1.0, -1.0,  0.0}, {sin(M_PI_2)*cos(M_PI+M_PI_4),
+      sin(M_PI_2)*sin(M_PI+M_PI_4),
+      cos(M_PI_2)}},
+
+    // -y face
+    {{ 0.0, -1.0,  1.0}, {sin(M_PI_4)*cos(M_PI+M_PI_2),
+      sin(M_PI_4)*sin(M_PI+M_PI_2),
+      cos(M_PI_4)}},
+    {{ 0.0, -1.0, -1.0}, {sin(3.0*M_PI_4)*cos(M_PI+M_PI_2),
+      sin(3.0*M_PI_4)*sin(M_PI+M_PI_2),
+      cos(3.0*M_PI_4)}},
+    {{ 1.0, -1.0,  0.0}, {sin(M_PI_2)*cos(M_PI+M_PI_2+M_PI_4),
+      sin(M_PI_2)*sin(M_PI+M_PI_2+M_PI_4),
+      cos(M_PI_2)}},
+
+  };
+
+  for (int i = 0 ; i < sizeof(testdata)/sizeof(testdata[0]) ; i ++) {
+    float3 res = vf3_sphere_cube_map(testdata[i][1]);
+    fail_unless(ALMOST_EQUAL(res.x, testdata[i][0].x, 0.000001),
+                "[%d].x: %f != %f", i, res.x, testdata[i][0].x);
+    fail_unless(ALMOST_EQUAL(res.y, testdata[i][0].y, 0.000001),
+                "[%d].y: %f != %f", i, res.y, testdata[i][0].y);
+    fail_unless(ALMOST_EQUAL(res.z, testdata[i][0].z, 0.000001),
+                "[%d].z: %f != %f", i, res.z, testdata[i][0].z);
+  }
+}
+END_TEST
+
 Suite
 *test_suite(int argc, const char *argv[argc])
 {
@@ -515,6 +668,10 @@ Suite
   /* Octant functions */
   tcase_add_test(tc_core, test_octant);
   tcase_add_test(tc_core, test_split_octant);
+
+  /* Cube mapping */
+  tcase_add_test(tc_core, test_cube_sphere_map);
+  tcase_add_test(tc_core, test_sphere_cube_map);
 
   suite_add_tcase(s, tc_core);
 
