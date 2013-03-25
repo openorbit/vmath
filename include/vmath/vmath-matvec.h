@@ -752,6 +752,7 @@ void mf4_lookat(float4x4 m,
 float4 vf3_axis_angle(float3 a, float3 b);
 
 void mf3_zxz_rotmatrix(float3x3 R, float asc_node, float incl, float arg_peri);
+void mf4_zxz_rotmatrix(float4x4 R, float asc_node, float incl, float arg_peri);
 
   /*!
    * Compute the octant of b with respect to a.

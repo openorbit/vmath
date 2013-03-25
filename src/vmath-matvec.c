@@ -1092,6 +1092,38 @@ mf3_zxz_rotmatrix(float3x3 R, float asc_node, float incl, float arg_peri)
 #endif
 }
 
+void
+mf4_zxz_rotmatrix(float4x4 R, float asc_node, float incl, float arg_peri)
+{
+  float cos_an = cosf(asc_node);
+  float sin_an = sinf(asc_node);
+  float cos_inc = cosf(incl);
+  float sin_inc = sinf(incl);
+  float cos_ap = cosf(arg_peri);
+  float sin_ap = sinf(arg_peri);
+
+  R[0].x = cos_an * cos_ap -  sin_an * cos_inc * sin_ap;
+  R[0].y = -cos_an * sin_ap - sin_an * cos_inc * cos_ap;
+  R[0].z = sin_an * sin_inc;
+  R[0].w = 0.0;
+
+  R[1].x = sin_an * cos_ap  + cos_an * cos_inc * sin_ap;
+  R[1].y = cos_an * cos_inc * cos_ap - sin_an * sin_ap;
+  R[1].z = -cos_an * sin_inc;
+  R[1].w = 0.0;
+
+  R[2].x = sin_inc * sin_ap;
+  R[2].y = sin_inc * cos_ap;
+  R[2].z = cos_inc;
+  R[2].w = 0.0;
+
+  R[3].x = 0.0;
+  R[3].y = 0.0;
+  R[3].z = 0.0;
+  R[3].w = 1.0;
+}
+
+
 
 
 int
