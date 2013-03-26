@@ -56,6 +56,11 @@ extern "C" {
 #define S_TWO           S_CONST(2.0)
 
 
+#define VMATH_RAD_PER_DEG (M_PI/180.0)
+#define VMATH_DEG_PER_RAD (180.0/M_PI)
+
+
+
 #ifdef __cplusplus
 }
 #endif 

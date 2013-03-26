@@ -687,6 +687,8 @@ void mf4_ident_z_up(float4x4 m);
 
 void mf4_cpy(float4x4 a, const float4x4 b);
 void mf4_mul2(float4x4 a, const float4x4 b);
+void mf4_mul3(float4x4 a, const float4x4 b, const float4x4 c);
+
 void mf4_add(float4x4 a, const float4x4 b, const float4x4 c);
 
 static inline void
@@ -752,6 +754,8 @@ void mf4_lookat(float4x4 m,
 float4 vf3_axis_angle(float3 a, float3 b);
 
 void mf3_zxz_rotmatrix(float3x3 R, float asc_node, float incl, float arg_peri);
+void mf4_zxz_rotmatrix(float4x4 R, float asc_node, float incl, float arg_peri);
+void md3_zxz_rotmatrix(double3x3 R, double asc_node, double incl, double arg_peri);
 
   /*!
    * Compute the octant of b with respect to a.
@@ -762,6 +766,16 @@ void mf3_zxz_rotmatrix(float3x3 R, float asc_node, float incl, float arg_peri);
    * Compute the octant of b with respect to a.
    */
   int vd3_octant(double3 a, double3 b);
+
+  /*!
+   * Compute center point of octant given a center coordinate and a side length.
+   *
+   * Useful for splitting octtrees and similar.
+   */
+  float3 vf3_octant_split(float3 a, float side, int octant);
+  double3 vd3_octant_split(double3 a, double side, int octant);
+
+
 
 #ifdef __cplusplus
 }

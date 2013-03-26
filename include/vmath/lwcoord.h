@@ -55,7 +55,7 @@
 
 struct lwcoord_t {
   float3 offs;
-  int3 seg;
+  long3 seg;
 };
 
 typedef struct lwcoord_t lwcoord_t;
@@ -66,7 +66,7 @@ void lwc_translate3fv(lwcoord_t *coord, float3 offs);
 void lwc_translate3f(lwcoord_t *coord, float dx, float dy, float dz);
 float3 lwc_global(const lwcoord_t *coord);
 double3 lwc_globald(const lwcoord_t *coord);
-float3 lwc_relvec(const lwcoord_t *coord, int3 seg);
+float3 lwc_relvec(const lwcoord_t *coord, long3 seg);
 float3 lwc_dist(const lwcoord_t *a, const lwcoord_t * b);
 void lwc_dump(const lwcoord_t *lwc);
 int lwc_octant(const lwcoord_t *a, const lwcoord_t * b);

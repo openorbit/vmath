@@ -38,5 +38,6 @@
 #include <vmath/vmath-convert.h>
 #include <vmath/vmath-integer.h>
 #include <vmath/vmath-geo.h>
+#include <vmath/vmath-cubemap.h>
 
 #endif /* ! VMATH_H__ */

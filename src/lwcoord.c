@@ -84,7 +84,7 @@ void
 lwc_set(lwcoord_t *coord, float x, float y, float z)
 {
   coord->offs = vf3_set(x, y, z);
-  coord->seg = vi3_set(0, 0, 0);
+  coord->seg = vl3_set(0, 0, 0);
 
   lwc_normalise(coord);
 }
@@ -92,17 +92,17 @@ lwc_set(lwcoord_t *coord, float x, float y, float z)
 void
 lwc_normalise(lwcoord_t *coord)
 {
-  if (fabsf(OFFS_X(coord)) >= OO_LW_SEGMENT_LEN) {
-    SEG_X(coord) += (int32_t) (OFFS_X(coord) / OO_LW_SEGMENT_LEN);
-    OFFS_X(coord) = fmodf(OFFS_X(coord), OO_LW_SEGMENT_LEN);
+  if (fabsf(coord->offs.x) >= OO_LW_SEGMENT_LEN) {
+    coord->seg.x += (int32_t) (coord->offs.x / OO_LW_SEGMENT_LEN);
+    coord->offs.x = fmodf(coord->offs.x, OO_LW_SEGMENT_LEN);
   }
-  if (fabsf(OFFS_Y(coord)) >= OO_LW_SEGMENT_LEN) {
-    SEG_Y(coord) += (int32_t) (OFFS_Y(coord) / OO_LW_SEGMENT_LEN);
-    OFFS_Y(coord) = fmodf(OFFS_Y(coord), OO_LW_SEGMENT_LEN);
+  if (fabsf(coord->offs.y) >= OO_LW_SEGMENT_LEN) {
+    coord->seg.y += (int32_t) (coord->offs.y / OO_LW_SEGMENT_LEN);
+    coord->offs.y = fmodf(coord->offs.y, OO_LW_SEGMENT_LEN);
   }
-  if (fabsf(OFFS_Z(coord)) >= OO_LW_SEGMENT_LEN) {
-    SEG_Z(coord) += (int32_t) (OFFS_Z(coord) / OO_LW_SEGMENT_LEN);
-    OFFS_Z(coord) = fmodf(OFFS_Z(coord), OO_LW_SEGMENT_LEN);
+  if (fabsf(coord->offs.z) >= OO_LW_SEGMENT_LEN) {
+    coord->seg.z += (int32_t) (coord->offs.z / OO_LW_SEGMENT_LEN);
+    coord->offs.z = fmodf(coord->offs.z, OO_LW_SEGMENT_LEN);
   }
 }
 
@@ -126,7 +126,7 @@ void
 lwc_dump(const lwcoord_t *lwc)
 {
   fprintf(stderr, "lwc: [%d %d %d]/[%f %f %f]\n",
-          lwc->seg.x, lwc->seg.y, lwc->seg.z,
+          (int)lwc->seg.x, (int)lwc->seg.y, (int)lwc->seg.z,
           lwc->offs.x, lwc->offs.y, lwc->offs.z);
 }
 
@@ -149,7 +149,7 @@ double3
 lwc_globald(const lwcoord_t *coord)
 {
   double3 p = vd3_set(coord->offs.x, coord->offs.y, coord->offs.z);
-  double3 seg = v3i_to_v3d(coord->seg);
+  double3 seg = v3l_to_v3d(coord->seg);
 
   return vd3_add(p, vd3_s_mul(seg, OO_LW_SEGMENT_LEN));
 }
@@ -159,19 +159,19 @@ float3
 lwc_global(const lwcoord_t *coord)
 {
   float3 p = coord->offs;
-  float3 seg = v3i_to_v3f(coord->seg);
+  float3 seg = v3l_to_v3f(coord->seg);
 
   return vf3_add(p, vf3_s_mul(seg, OO_LW_SEGMENT_LEN));
 }
 
 float3
-lwc_relvec(const lwcoord_t *coord, int3 seg)
+lwc_relvec(const lwcoord_t *coord, long3 seg)
 {
   float3 r = coord->offs;
-  int3 segdiff = coord->seg - seg;
-  float3 segdiffr = vf3_set((float)v3i_x(segdiff),
-                            (float)v3i_y(segdiff),
-                            (float)v3i_z(segdiff));
+  long3 segdiff = coord->seg - seg;
+  float3 segdiffr = vf3_set((float)segdiff.x,
+                            (float)segdiff.y,
+                            (float)segdiff.z);
   r = vf3_add(r, vf3_s_mul(segdiffr, OO_LW_SEGMENT_LEN));
   return r;
 }
@@ -180,10 +180,10 @@ float3
 lwc_dist(const lwcoord_t *a, const lwcoord_t * b)
 {
   float3 diff = vf3_sub(a->offs, b->offs);
-  int3 segdiff = a->seg - b->seg;
-  float3 segdiffr = vf3_set((float)v3i_x(segdiff),
-                            (float)v3i_y(segdiff),
-                            (float)v3i_z(segdiff));
+  long3 segdiff = a->seg - b->seg;
+  float3 segdiffr = vf3_set((float)segdiff.x,
+                            (float)segdiff.y,
+                            (float)segdiff.z);
 
   return vf3_add(diff, vf3_s_mul(segdiffr, OO_LW_SEGMENT_LEN));
 }
@@ -195,18 +195,7 @@ lwc_octant(const lwcoord_t *a, const lwcoord_t * b)
   float3 rel = lwc_dist(b, a);
 
   int octant = 0;
-  if (rel.x >= 0.0) {
-    octant += 1;
-  }
-
-  if (rel.y >= 0.0) {
-    octant += 2;
-  }
-
-  if (rel.z >= 0.0) {
-    octant += 4;
-  }
-
+  octant = vf3_octant(vf3_set(0, 0, 0), rel);
   return octant;
 }
 
@@ -223,17 +212,17 @@ lwc_set64(lwcoord64_t *coord, double x, double y, double z)
 void
 lwc_normalise64(lwcoord64_t *coord)
 {
-  if (fabs(OFFS_X64(coord)) >= OO_LW_SEGMENT_LEN64) {
-    OFFS_X64(coord) += (int32_t) (OFFS_X64(coord) / OO_LW_SEGMENT_LEN64);
-    OFFS_X64(coord) = fmod(OFFS_X64(coord), OO_LW_SEGMENT_LEN64);
+  if (fabs(coord->offs.x) >= OO_LW_SEGMENT_LEN64) {
+    coord->seg.x += (int64_t) (coord->offs.x / OO_LW_SEGMENT_LEN64);
+    coord->offs.x = fmod(coord->offs.x, OO_LW_SEGMENT_LEN64);
   }
-  if (fabs(OFFS_Y64(coord)) >= OO_LW_SEGMENT_LEN64) {
-    SEG_Y64(coord) += (int32_t) (OFFS_Y64(coord) / OO_LW_SEGMENT_LEN64);
-    OFFS_Y64(coord) = fmod(OFFS_Y64(coord), OO_LW_SEGMENT_LEN64);
+  if (fabs(coord->offs.y) >= OO_LW_SEGMENT_LEN64) {
+    coord->seg.y += (int64_t) (coord->offs.y / OO_LW_SEGMENT_LEN64);
+    coord->offs.y = fmod(coord->offs.y, OO_LW_SEGMENT_LEN64);
   }
-  if (fabs(OFFS_Z64(coord)) >= OO_LW_SEGMENT_LEN64) {
-    SEG_Z64(coord) += (int32_t) (OFFS_Z64(coord) / OO_LW_SEGMENT_LEN64);
-    OFFS_Z64(coord) = fmod(OFFS_Z64(coord), OO_LW_SEGMENT_LEN64);
+  if (fabs(coord->offs.z) >= OO_LW_SEGMENT_LEN64) {
+    coord->seg.z += (int64_t) (coord->offs.z / OO_LW_SEGMENT_LEN64);
+    coord->offs.z = fmod(coord->offs.z, OO_LW_SEGMENT_LEN64);
   }
 }
 
