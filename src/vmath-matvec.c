@@ -933,6 +933,31 @@ mf4_mul2(float4x4 a, const float4x4 b)
 }
 
 void
+mf4_mul3(float4x4 a, const float4x4 b, const float4x4 c)
+{
+  float4x4 ctransp;
+  mf4_transpose2(ctransp, c);
+
+  float4x4 atmp;
+  float4x4 btransp;
+
+  mf4_cpy(atmp, a);
+  mf4_transpose2(btransp, b);
+
+  for (int i = 0 ; i < 4 ; ++ i) {
+    for (int j = 0 ; j < 4 ; ++ j) {
+#if __has_feature(attribute_ext_vector_type)
+      a[i][j] = vf4_dot(b[i], ctransp[j]);
+#else
+#error "Please fix for non clang compiler"
+#endif
+    }
+  }
+}
+
+
+
+void
 mf4_add(float4x4 a, const float4x4 b, const float4x4 c)
 {
   a[0] = b[0] + c[0];
@@ -1124,6 +1149,28 @@ mf4_zxz_rotmatrix(float4x4 R, float asc_node, float incl, float arg_peri)
 }
 
 
+void
+md3_zxz_rotmatrix(double3x3 R, double asc_node, double incl, double arg_peri)
+{
+  double cos_an = cos(asc_node);
+  double sin_an = sin(asc_node);
+  double cos_inc = cos(incl);
+  double sin_inc = sin(incl);
+  double cos_ap = cos(arg_peri);
+  double sin_ap = sin(arg_peri);
+
+  R[0].x = cos_an * cos_ap -  sin_an * cos_inc * sin_ap;
+  R[0].y = -cos_an * sin_ap - sin_an * cos_inc * cos_ap;
+  R[0].z = sin_an * sin_inc;
+
+  R[1].x = sin_an * cos_ap  + cos_an * cos_inc * sin_ap;
+  R[1].y = cos_an * cos_inc * cos_ap - sin_an * sin_ap;
+  R[1].z = -cos_an * sin_inc;
+
+  R[2].x = sin_inc * sin_ap;
+  R[2].y = sin_inc * cos_ap;
+  R[2].z = cos_inc;
+}
 
 
 int

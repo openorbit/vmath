@@ -687,6 +687,8 @@ void mf4_ident_z_up(float4x4 m);
 
 void mf4_cpy(float4x4 a, const float4x4 b);
 void mf4_mul2(float4x4 a, const float4x4 b);
+void mf4_mul3(float4x4 a, const float4x4 b, const float4x4 c);
+
 void mf4_add(float4x4 a, const float4x4 b, const float4x4 c);
 
 static inline void
@@ -753,6 +755,7 @@ float4 vf3_axis_angle(float3 a, float3 b);
 
 void mf3_zxz_rotmatrix(float3x3 R, float asc_node, float incl, float arg_peri);
 void mf4_zxz_rotmatrix(float4x4 R, float asc_node, float incl, float arg_peri);
+void md3_zxz_rotmatrix(double3x3 R, double asc_node, double incl, double arg_peri);
 
   /*!
    * Compute the octant of b with respect to a.
