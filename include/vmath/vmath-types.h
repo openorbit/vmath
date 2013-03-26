@@ -68,17 +68,17 @@ extern "C" {
   typedef double __attribute__((ext_vector_type (4))) double4;
   typedef double __attribute__((ext_vector_type (16))) double16;
 
-  typedef int16_t __attribute__((ext_vector_type (4))) short3;
+  typedef int16_t __attribute__((ext_vector_type (3))) short3;
   typedef int16_t __attribute__((ext_vector_type (4))) short4;
-  typedef uint16_t __attribute__((ext_vector_type (4))) ushort3;
+  typedef uint16_t __attribute__((ext_vector_type (3))) ushort3;
   typedef uint16_t __attribute__((ext_vector_type (4))) ushort4;
-  typedef int32_t __attribute__((ext_vector_type (4))) int3;
+  typedef int32_t __attribute__((ext_vector_type (3))) int3;
   typedef int32_t __attribute__((ext_vector_type (4))) int4;
   typedef uint32_t __attribute__((ext_vector_type (4))) uint3;
   typedef uint32_t __attribute__((ext_vector_type (4))) uint4;
-  typedef int64_t __attribute__((ext_vector_type (4))) long3;
+  typedef int64_t __attribute__((ext_vector_type (3))) long3;
   typedef int64_t __attribute__((ext_vector_type (4))) long4;
-  typedef uint64_t __attribute__((ext_vector_type (4))) ulong3;
+  typedef uint64_t __attribute__((ext_vector_type (3))) ulong3;
   typedef uint64_t __attribute__((ext_vector_type (4))) ulong4;
 
   typedef double3 double3x3[3];
