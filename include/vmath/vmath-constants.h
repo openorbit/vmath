@@ -45,17 +45,6 @@ extern "C" {
 
 #include <vmath/vmath-types.h>
 
-#define S_CONST(a) (a ## f)
-    
-
-#define S_PI            S_CONST(3.14159265)
-#define S_PI_HALF       S_CONST(1.57079633)
-#define S_ZERO          S_CONST(0.0)
-#define S_POINT_FIVE    S_CONST(0.5)
-#define S_ONE           S_CONST(1.0)
-#define S_TWO           S_CONST(2.0)
-
-
 #define VMATH_RAD_PER_DEG (M_PI/180.0)
 #define VMATH_DEG_PER_RAD (180.0/M_PI)
 

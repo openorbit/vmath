@@ -464,9 +464,9 @@ m_axis_rot_y(float4x4 m, float a)
     float cos_a = cos(a);
     memset(m, 0, sizeof(float4x4));
     m[0][0] = cos_a; m[0][2] = -sin_a;
-    m[1][1] = S_ONE;
+    m[1][1] = 1.0f;
     m[2][0] = sin_a; m[2][2] = cos_a;
-    m[3][3] = S_ONE;
+    m[3][3] = 1.0f;
 }
 
 void
@@ -477,8 +477,8 @@ m_axis_rot_z(float4x4 m, float a)
     memset(m, 0, sizeof(float4x4));
     m[0][0] = cos_a; m[0][1] = sin_a;
     m[1][0] = -sin_a; m[1][1] = cos_a;
-    m[2][2] = S_ONE;
-    m[3][3] = S_ONE;
+    m[2][2] = 1.0f;
+    m[3][3] = 1.0f;
 }
 
 
@@ -488,10 +488,10 @@ m_vec_rot_x(float4x4 m, float a)
     float sin_a = sin(a);
     float cos_a = cos(a);
     memset(m, 0, sizeof(float4x4));
-    m[0][0] = S_ONE;
+    m[0][0] = 1.0f;
     m[1][1] = cos_a; m[1][1] = -sin_a;
     m[2][1] = sin_a; m[2][1] = cos_a;
-    m[3][3] = S_ONE;
+    m[3][3] = 1.0f;
 }
 
 void
@@ -514,18 +514,18 @@ m_vec_rot_z(float4x4 m, float a)
     memset(m, 0, sizeof(float4x4));
     m[0][0] = cos_a; m[0][1] = -sin_a;
     m[1][0] = sin_a; m[1][1] = cos_a;
-    m[2][2] = S_ONE;
-    m[3][3] = S_ONE;
+    m[2][2] = 1.0f;
+    m[3][3] = 1.0f;
 }
 
 void
 m_unit(float4x4 m)
 {
     memset(m, 0, sizeof(float4x4));
-    m[0][0] = S_ONE;
-    m[1][1] = S_ONE;
-    m[2][2] = S_ONE;
-    m[3][3] = S_ONE;
+    m[0][0] = 1.0f;
+    m[1][1] = 1.0f;
+    m[2][2] = 1.0f;
+    m[3][3] = 1.0f;
 }
 
 void

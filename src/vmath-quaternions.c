@@ -425,7 +425,7 @@ quaternion_t
 q_rotv(float3 axis, float alpha)
 {
   quaternion_t q;
-  float Omega = alpha * S_POINT_FIVE;
+  float Omega = alpha * 0.5;
   float sin_Omega = sin(Omega);
 #if __has_feature(attribute_ext_vector_type)
   q.x = axis.x * sin_Omega;

@@ -42,8 +42,8 @@
 #include <vmath/vmath-integer.h>
 #include <vmath/vmath-matvec.h>
 
-#define DEG_TO_RAD(d) ((d) * S_PI/180.0f)
-#define RAD_TO_DEG(r) ((r) * 180.0f/S_PI)
+#define DEG_TO_RAD(d) ((d) * M_PI/180.0f)
+#define RAD_TO_DEG(r) ((r) * 180.0f/M_PI)
 
 static inline float3
 v3i_to_v3f(int3 iv)
