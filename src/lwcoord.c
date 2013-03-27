@@ -93,15 +93,15 @@ void
 lwc_normalise(lwcoord_t *coord)
 {
   if (fabsf(coord->offs.x) >= OO_LW_SEGMENT_LEN) {
-    coord->seg.x += (int32_t) (coord->offs.x / OO_LW_SEGMENT_LEN);
+    coord->seg.x += (int64_t) (coord->offs.x / OO_LW_SEGMENT_LEN);
     coord->offs.x = fmodf(coord->offs.x, OO_LW_SEGMENT_LEN);
   }
   if (fabsf(coord->offs.y) >= OO_LW_SEGMENT_LEN) {
-    coord->seg.y += (int32_t) (coord->offs.y / OO_LW_SEGMENT_LEN);
+    coord->seg.y += (int64_t) (coord->offs.y / OO_LW_SEGMENT_LEN);
     coord->offs.y = fmodf(coord->offs.y, OO_LW_SEGMENT_LEN);
   }
   if (fabsf(coord->offs.z) >= OO_LW_SEGMENT_LEN) {
-    coord->seg.z += (int32_t) (coord->offs.z / OO_LW_SEGMENT_LEN);
+    coord->seg.z += (int64_t) (coord->offs.z / OO_LW_SEGMENT_LEN);
     coord->offs.z = fmodf(coord->offs.z, OO_LW_SEGMENT_LEN);
   }
 }
@@ -125,8 +125,8 @@ lwc_div(lwcoord_t *lwc, float b)
 void
 lwc_dump(const lwcoord_t *lwc)
 {
-  fprintf(stderr, "lwc: [%d %d %d]/[%f %f %f]\n",
-          (int)lwc->seg.x, (int)lwc->seg.y, (int)lwc->seg.z,
+  fprintf(stderr, "lwc: [%lld %lld %lld]/[%f %f %f]\n",
+          lwc->seg.x, lwc->seg.y, lwc->seg.z,
           lwc->offs.x, lwc->offs.y, lwc->offs.z);
 }
 
