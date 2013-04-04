@@ -716,6 +716,9 @@ mf4_translate(float4x4 a, float3 v)
   mf4_mul2(a, tmp);
 }
 
+void mf4_scale(float4x4 S, float xs, float ys, float zs);
+
+
 // Common opengl replacements
 /*! Create ortho projection matrix */
 void mf4_ortho(float4x4 m,

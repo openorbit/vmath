@@ -1225,3 +1225,12 @@ vd3_octant_split(double3 a, double side, int octant)
 }
 
 
+void
+mf4_scale(float4x4 S, float xs, float ys, float zs)
+{
+  mf4_ident(S);
+  S[0].x = xs;
+  S[1].y = ys;
+  S[2].z = zs;
+}
+
