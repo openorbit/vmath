@@ -1,5 +1,5 @@
 /*
-  Copyright 2006 Mattias Holm <mattias.holm(at)openorbit.org>
+  Copyright 2006,2013 Mattias Holm <mattias.holm(at)openorbit.org>
 
   This file is part of Open Orbit.
 
@@ -278,23 +278,23 @@ START_TEST(test_m_subdet3)
                 { 0.0,  2.0,  5.0, 0.0}};
 
   float det = mf4_subdet3(m, 0, 0);
-  fail_unless( ALMOST_EQUAL(det, S_CONST(-10.0), 0.0001f),
+  fail_unless( ALMOST_EQUAL(det, -10.0, 0.0001f),
               "Sub deteriminant[0][0] expected -10.0, but got %f", det);
 
   det = mf4_subdet3(m, 0, 1);
-  fail_unless( ALMOST_EQUAL(det, S_CONST(-10.0), 0.0001f),
+  fail_unless( ALMOST_EQUAL(det, -10.0, 0.0001f),
               "Sub deteriminant[0][1] expected -10.0, but got %f", det);
 
   det = mf4_subdet3(m, 0, 2);
-  fail_unless( ALMOST_EQUAL(det, S_CONST(-4.0), 0.0001f),
+  fail_unless( ALMOST_EQUAL(det, -4.0, 0.0001f),
               "Sub deteriminant[0][2] expected 0.0, but got %f", det);
 
   det = mf4_subdet3(m, 0, 3);
-  fail_unless( ALMOST_EQUAL(det, S_CONST(22.0), 0.0001f),
+  fail_unless( ALMOST_EQUAL(det, 22.0, 0.0001f),
               "Sub deteriminant[0][3] expected 22.0, but got %f", det);
 
   det = mf4_subdet3(m, 2, 1);
-  fail_unless( ALMOST_EQUAL(det, S_CONST(-10.0), 0.0001f),
+  fail_unless( ALMOST_EQUAL(det, -10.0, 0.0001f),
               "Sub deteriminant[2][1] expected 10.0, but got %f", det);
 }
 END_TEST
@@ -691,5 +691,3 @@ main(int argc, const char *argv[argc])
 
   return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
-
-
