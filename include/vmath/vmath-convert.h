@@ -45,6 +45,18 @@
 #define DEG_TO_RAD(d) ((d) * M_PI/180.0f)
 #define RAD_TO_DEG(r) ((r) * 180.0f/M_PI)
 
+static inline double3
+vf3_to_vd3(float3 v)
+{
+  return vd3_set(v.x, v.y, v.z);
+}
+
+static inline float3
+vd3_to_vf3(double3 v)
+{
+  return vf3_set(v.x, v.y, v.z);
+}
+
 static inline float3
 v3i_to_v3f(int3 iv)
 {

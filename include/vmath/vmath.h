@@ -32,6 +32,7 @@
 #define VMATH_H__
 
 #include <vmath/vmath-constants.h>
+#include <vmath/vmath-convert.h>
 #include <vmath/vmath-types.h>
 #include <vmath/vmath-matvec.h>
 #include <vmath/vmath-quaternions.h>

@@ -60,9 +60,14 @@ struct lwcoord_t {
 
 typedef struct lwcoord_t lwcoord_t;
 
-void lwc_set(lwcoord_t *coord, float x, float y, float z);
+void lwc_set(lwcoord_t *coord, double x, double y, double z);
+void lwc_setv(lwcoord_t *coord, double3 v);
+
+
 void lwc_normalise(lwcoord_t *coord);
 void lwc_translate3fv(lwcoord_t *coord, float3 offs);
+void lwc_translate3dv(lwcoord_t *coord, double3 offs);
+
 void lwc_translate3f(lwcoord_t *coord, float dx, float dy, float dz);
 float3 lwc_global(const lwcoord_t *coord);
 double3 lwc_globald(const lwcoord_t *coord);

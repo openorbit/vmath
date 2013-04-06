@@ -36,6 +36,7 @@
 
 #include <vmath/vmath.h>
 #include <vmath/lwcoord.h>
+#include <vmath/vmath-convert.h>
 
 #include <stdio.h>
 
@@ -81,13 +82,22 @@
 #define SEG_Z64(c) (((int64_t*)&(c)->seg)[2])
 #endif
 void
-lwc_set(lwcoord_t *coord, float x, float y, float z)
+lwc_set(lwcoord_t *coord, double x, double y, double z)
 {
   coord->offs = vf3_set(x, y, z);
   coord->seg = vl3_set(0, 0, 0);
 
   lwc_normalise(coord);
 }
+
+void
+lwc_setv(lwcoord_t *coord, double3 v)
+{
+  coord->offs = vf3_set(v.x, v.y, v.z);
+  coord->seg = vl3_set(0, 0, 0);
+  lwc_normalise(coord);
+}
+
 
 void
 lwc_normalise(lwcoord_t *coord)
@@ -137,6 +147,15 @@ lwc_translate3fv(lwcoord_t *coord, float3 offs)
   coord->offs = vf3_add(coord->offs, offs);
   lwc_normalise(coord);
 }
+
+void
+lwc_translate3dv(lwcoord_t *coord, double3 offs)
+{
+  double3 v = vd3_add(vf3_to_vd3(coord->offs), offs);
+  coord->offs = vf3_set(v.x, v.y, v.z);
+  lwc_normalise(coord);
+}
+
 
 void
 lwc_translate3f(lwcoord_t *coord, float dx, float dy, float dz)
