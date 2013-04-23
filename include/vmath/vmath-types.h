@@ -84,7 +84,8 @@ extern "C" {
   typedef double3 double3x3[3];
   typedef double4 double4x4[4];
 
-  typedef float __attribute__((ext_vector_type (4))) quaternion_t;
+  typedef float __attribute__((ext_vector_type (4))) quatf_t;
+  typedef double __attribute__((ext_vector_type (4))) quatd_t;
 
 
 #else

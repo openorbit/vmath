@@ -1,5 +1,5 @@
 /*
-  Copyright 2006 Mattias Holm <mattias.holm(at)openorbit.org>
+  Copyright 2006,2013 Mattias Holm <lorrden(at)openorbit.org>
 
   This file is part of Open Orbit. Open Orbit is free software: you can
   redistribute it and/or modify it under the terms of the GNU General Public
@@ -45,28 +45,21 @@ extern "C" {
 #include <vmath/vmath-types.h>
 #include <vmath/vmath-constants.h>
 #include <vmath/vmath-matvec.h>
-
-#define Q_X 0
-#define Q_Y 1
-#define Q_Z 2
-#define Q_W 3
-
-#define Q_CPY(dst, src) ((dst).s = (src).s)
     
-#define QUAT_X(q) (q)[Q_X]
-#define QUAT_Y(q) (q)[Q_Y]
-#define QUAT_Z(q) (q)[Q_Z]
-#define QUAT_W(q) (q)[Q_W]
-
-    
- float q_scalar(const quaternion_t q)
-    __attribute__ ((__pure__));
+float qf_scalar(const quatf_t q)
+  __attribute__ ((__pure__));
+double qd_scalar(const quatd_t q)
+  __attribute__ ((__pure__));
 
 
-float3 q_vector(const quaternion_t q);
-float3 v_q_rot(float3 v, quaternion_t q);
+float3 qf_vector(const quatf_t q);
+double3 qd_vector(const quatd_t q);
 
-#define Q_IDENT vf4_set(0.0, 0.0, 0.0, 1.0)
+float3 vf3_qf_rot(float3 v, quatf_t q);
+double3 vd3_qd_rot(double3 v, quatd_t q);
+
+#define QF_IDENT vf4_set(0.0, 0.0, 0.0, 1.0)
+#define QD_IDENT vd4_set(0.0, 0.0, 0.0, 1.0)
 
 /*!
  * \brief Converts a quaternion to a rotation matrix.
@@ -79,12 +72,18 @@ float3 v_q_rot(float3 v, quaternion_t q);
  * \param q The quaternion.
  */
 
-void q_mf3_convert(float3x3 m, quaternion_t q);
-void q_mf3_convert_inv(float3x3 m, quaternion_t q);
+void qf_mf3_convert(float3x3 m, quatf_t q);
+void qd_md3_convert(double3x3 m, quatd_t q);
+void qf_mf3_convert_inv(float3x3 m, quatf_t q);
+void qd_md3_convert_inv(double3x3 m, quatd_t q);
 
-void q_mf4_convert(float4x4 m, quaternion_t q);
-void q_mf4_convert_inv(float4x4 m, quaternion_t q);
-quaternion_t q_slerp(quaternion_t q0, quaternion_t q1, float t);
+void qf_mf4_convert(float4x4 m, quatf_t q);
+void qd_md4_convert(double4x4 m, quatd_t q);
+void qf_mf4_convert_inv(float4x4 m, quatf_t q);
+void qd_md4_convert_inv(double4x4 m, quatd_t q);
+
+quatf_t qf_slerp(quatf_t q0, quatf_t q1, float t);
+quatd_t qd_slerp(quatd_t q0, quatd_t q1, double t);
 
 /*!
  * \brief Converts a rotation matrix to a quaternion.
@@ -98,38 +97,45 @@ quaternion_t q_slerp(quaternion_t q0, quaternion_t q1, float t);
  * \param m The rotational matrix.
  */
 
-quaternion_t mf4_q_convert(float4x4 m) __attribute__ ((__nonnull__));
-quaternion_t mf3_q_convert(float3x3 m) __attribute__ ((__nonnull__));
+quatf_t mf4_qf_convert(float4x4 m) __attribute__ ((__nonnull__));
+quatf_t mf3_qf_convert(float3x3 m) __attribute__ ((__nonnull__));
+quatd_t md3_qd_convert(double3x3 m) __attribute__ ((__nonnull__));
 
-quaternion_t q_add(const quaternion_t a, const quaternion_t b);
+quatf_t qf_add(const quatf_t a, const quatf_t b);
+quatd_t qd_add(const quatd_t a, const quatd_t b);
 
 
-quaternion_t
-q_mul(const quaternion_t a, const quaternion_t b);
+quatf_t qf_mul(const quatf_t a, const quatf_t b);
+quatd_t qd_mul(const quatd_t a, const quatd_t b);
+
+
+
+quatf_t qf_s_mul(quatf_t q, float d);
+quatd_t qd_s_mul(quatd_t q, double d);
+
+quatf_t qf_s_div(const quatf_t q, float d);
+quatd_t qd_s_div(const quatd_t q, double d);
+
+
+float qf_dot(quatf_t a, quatf_t b) __attribute__ ((__pure__));
+double qd_dot(quatd_t a, quatd_t b) __attribute__ ((__pure__));
+
     
-quaternion_t q_s_mul(quaternion_t q, float d);
-
-quaternion_t q_s_div(const quaternion_t q, float d);
-
-
- float q_dot(quaternion_t a, quaternion_t b)
-    __attribute__ ((__pure__));
-
+float3 qf_cross(const quatf_t a, const quatf_t b);
+double3 qd_cross(const quatd_t a, const quatd_t b);
     
- float3 q_cross(const quaternion_t a, const quaternion_t b);
-
+float qf_abs(const quatf_t q);
+double qd_abs(const quatd_t q);
     
- float q_abs(const quaternion_t q);
-
-    
-quaternion_t
-q_conj(const quaternion_t q);
+quatf_t qf_conj(const quatf_t q);
+quatd_t qd_conj(const quatd_t q);
 
 
-quaternion_t q_repr(const quaternion_t q);
+quatf_t qf_repr(const quatf_t q);
 
 
-quaternion_t q_div(const quaternion_t a, const quaternion_t b);
+quatf_t qf_div(const quatf_t a, const quatf_t b);
+quatd_t qd_div(const quatd_t a, const quatd_t b);
 
 /*!
  * \brief   Creates a rotation quaternion
@@ -141,10 +147,11 @@ quaternion_t q_div(const quaternion_t a, const quaternion_t b);
  * \param axis  A unit vector describing the axis of rotation 
  * \param alpha Rotation in radians.
 */
-quaternion_t q_rotv(float3 axis, float alpha);
+quatf_t qf_rotv(float3 axis, float alpha);
+quatd_t qd_rotv(double3 axis, double alpha);
 
-quaternion_t
-q_rot(float x, float y, float z, float alpha);
+quatf_t qf_rot(float x, float y, float z, float alpha);
+quatd_t qd_rot(double x, double y, double z, double alpha);
 
 #define Q_ROT_X(q, r)                                           \
     do {                                                        \
@@ -169,15 +176,34 @@ q_rot(float x, float y, float z, float alpha);
     } while (0)
 
 
-quaternion_t q_normalise(quaternion_t q);
+quatf_t qf_normalise(quatf_t q);
+quatd_t qd_normalise(quatd_t q);
 
-static inline quaternion_t
-q_vf3_rot(quaternion_t q, float3 v, float dt)
+static inline quatf_t
+qf_vf3_rot(quatf_t q, float3 v, float dt)
 {
-  quaternion_t qv = {v.x, v.y, v.z, 0.0f};
-  quaternion_t qp = q_add(q, q_s_mul(q_mul(qv, q), dt/2.0));
+  quatf_t qv = {v.x, v.y, v.z, 0.0f};
+  quatf_t qp = qf_add(q, qf_s_mul(qf_mul(qv, q), dt/2.0));
   return qp;
 }
+
+static inline quatd_t
+qd_vd3_rot(quatd_t q, double3 v, double dt)
+{
+  quatd_t qv = {v.x, v.y, v.z, 0.0};
+  quatd_t qp = qd_add(q, qd_s_mul(qd_mul(qv, q), dt/2.0));
+  return qp;
+}
+
+
+static inline quatf_t
+qf_vd3_rot(quatf_t q, double3 v, double dt)
+{
+  quatf_t qv = {v.x, v.y, v.z, 0.0f};
+  quatf_t qp = qf_add(q, qf_s_mul(qf_mul(qv, q), dt/2.0));
+  return qp;
+}
+
 
 #ifdef __cplusplus
 }

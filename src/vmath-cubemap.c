@@ -39,7 +39,7 @@
 #include <assert.h>
 
 float3
-v3f_cube_sphere_map(float3 p)
+vf3_cube_sphere_map(float3 p)
 {
   float3 tmp;
   tmp.x = sqrtf(1.0-p.y*p.y*0.5-p.z*p.z*0.5+p.y*p.y*p.z*p.z/3.0);
@@ -103,3 +103,71 @@ vf3_sphere_cube_map(float3 p)
 
   return cp;
 }
+
+
+double3
+vd3_cube_sphere_map(double3 p)
+{
+  double3 tmp;
+  tmp.x = sqrtf(1.0-p.y*p.y*0.5-p.z*p.z*0.5+p.y*p.y*p.z*p.z/3.0);
+  tmp.y = sqrtf(1.0-p.z*p.z*0.5-p.x*p.x*0.5+p.z*p.z*p.x*p.x/3.0);
+  tmp.z = sqrtf(1.0-p.x*p.x*0.5-p.y*p.y*0.5+p.x*p.x*p.y*p.y/3.0);
+
+  double3 res = vd3_mul(p, tmp);
+  return res;
+}
+
+// The function is not hardened enough at the moment. Doubles are used, as
+// rounding errors will otherwise result in negative 0 to sqrt.
+double3
+vd3_sphere_cube_map(double3 p)
+{
+  double3 pabs = vd3_set(fabs(p.x), fabs(p.y), fabs(p.z));
+  double3 cp;
+
+  if (pabs.x >= pabs.y && pabs.x >= pabs.z) {
+    cp.x = copysign(1.0, p.x);
+
+    double y2 = 2.0*p.y*p.y;
+    double z2 = 2.0*p.z*p.z;
+    double y2z2_3 = -y2+z2-3.0;
+    double inner = -sqrt(y2z2_3*y2z2_3 - 12.0*y2);
+
+    if (p.y == 0.0) cp.y = 0.0;
+    else cp.y = copysign(sqrt(inner + y2 - z2 + 3.0)/M_SQRT2, p.y);
+
+    if (p.z == 0.0) cp.z = 0.0;
+    else cp.z = copysign(sqrt(inner - y2 + z2 + 3.0)/M_SQRT2, p.z);
+  } else if (pabs.y >= pabs.x && pabs.y >= pabs.z) {
+    double z2 = 2.0*p.z*p.z;
+    double x2 = 2.0*p.x*p.x;
+    double z2x2_3 = -z2+x2-3.0;
+    double inner = -sqrt(z2x2_3*z2x2_3-12.0*z2);
+
+    if (p.x == 0.0) cp.x = 0.0;
+    else cp.x = copysign(sqrt(inner + x2 - z2 + 3.0)/M_SQRT2, p.x);
+
+    cp.y = copysign(1.0, p.y);
+
+    if (p.z == 0.0) cp.z = 0.0;
+    else cp.z = copysign(sqrt(inner - x2 + z2 + 3.0)/M_SQRT2, p.z);
+  } else if (pabs.z >= pabs.x && pabs.z >= pabs.y) {
+    double x2 = 2.0*p.x*p.x;
+    double y2 = 2.0*p.y*p.y;
+    double x2y2_3 = -x2+y2-3.0;
+    double inner = -sqrt(x2y2_3*x2y2_3-12.0*x2);
+
+    if (p.x == 0.0) cp.x = 0.0;
+    else cp.x = copysign(sqrt(inner + x2 - y2 + 3.0)/M_SQRT2, p.x);
+
+    if (p.y == 0.0) cp.y = 0.0;
+    else cp.y = copysign(sqrt(inner - x2 + y2 + 3.0)/M_SQRT2, p.y);
+
+    cp.z = copysign(1.0, p.z);
+  } else {
+    assert(0 && "impossible");
+  }
+  
+  return cp;
+}
+

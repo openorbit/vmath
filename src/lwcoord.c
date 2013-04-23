@@ -84,7 +84,7 @@
 void
 lwc_set(lwcoord_t *coord, double x, double y, double z)
 {
-  coord->offs = vf3_set(x, y, z);
+  coord->offs = vd3_set(x, y, z);
   coord->seg = vl3_set(0, 0, 0);
 
   lwc_normalise(coord);
@@ -93,7 +93,7 @@ lwc_set(lwcoord_t *coord, double x, double y, double z)
 void
 lwc_setv(lwcoord_t *coord, double3 v)
 {
-  coord->offs = vf3_set(v.x, v.y, v.z);
+  coord->offs = v;
   coord->seg = vl3_set(0, 0, 0);
   lwc_normalise(coord);
 }
@@ -119,7 +119,7 @@ lwc_normalise(lwcoord_t *coord)
 void
 lwc_mul(lwcoord_t *lwc, float b)
 {
-  float3 p = lwc_global(lwc);
+  double3 p = lwc_global(lwc);
   p = p * b;
   lwc_set(lwc, p.x, p.y, p.z);
 }
@@ -127,7 +127,7 @@ lwc_mul(lwcoord_t *lwc, float b)
 void
 lwc_div(lwcoord_t *lwc, float b)
 {
-  float3 p = lwc_global(lwc);
+  double3 p = lwc_global(lwc);
   p = p / b;
   lwc_set(lwc, p.x, p.y, p.z);
 }
@@ -144,15 +144,16 @@ lwc_dump(const lwcoord_t *lwc)
 void
 lwc_translate3fv(lwcoord_t *coord, float3 offs)
 {
-  coord->offs = vf3_add(coord->offs, offs);
+  double3 offsd = vf3_to_vd3(offs);
+  coord->offs = vd3_add(coord->offs, offsd);
   lwc_normalise(coord);
 }
 
 void
 lwc_translate3dv(lwcoord_t *coord, double3 offs)
 {
-  double3 v = vd3_add(vf3_to_vd3(coord->offs), offs);
-  coord->offs = vf3_set(v.x, v.y, v.z);
+  double3 v = vd3_add(coord->offs, offs);
+  coord->offs = v;
   lwc_normalise(coord);
 }
 
@@ -160,61 +161,61 @@ lwc_translate3dv(lwcoord_t *coord, double3 offs)
 void
 lwc_translate3f(lwcoord_t *coord, float dx, float dy, float dz)
 {
-  coord->offs = vf3_add(coord->offs, vf3_set(dx, dy, dz));
+  coord->offs = vd3_add(coord->offs, vd3_set(dx, dy, dz));
   lwc_normalise(coord);
 }
 
 double3
 lwc_globald(const lwcoord_t *coord)
 {
-  double3 p = vd3_set(coord->offs.x, coord->offs.y, coord->offs.z);
+  double3 p = coord->offs;
   double3 seg = v3l_to_v3d(coord->seg);
 
   return vd3_add(p, vd3_s_mul(seg, OO_LW_SEGMENT_LEN));
 }
 
 
-float3
+double3
 lwc_global(const lwcoord_t *coord)
 {
-  float3 p = coord->offs;
-  float3 seg = v3l_to_v3f(coord->seg);
+  double3 p = coord->offs;
+  double3 seg = v3l_to_v3d(coord->seg);
 
-  return vf3_add(p, vf3_s_mul(seg, OO_LW_SEGMENT_LEN));
+  return vd3_add(p, vd3_s_mul(seg, OO_LW_SEGMENT_LEN));
 }
 
-float3
+double3
 lwc_relvec(const lwcoord_t *coord, long3 seg)
 {
-  float3 r = coord->offs;
+  double3 r = coord->offs;
   long3 segdiff = coord->seg - seg;
-  float3 segdiffr = vf3_set((float)segdiff.x,
-                            (float)segdiff.y,
-                            (float)segdiff.z);
-  r = vf3_add(r, vf3_s_mul(segdiffr, OO_LW_SEGMENT_LEN));
+  double3 segdiffr = vd3_set((double)segdiff.x,
+                             (double)segdiff.y,
+                             (double)segdiff.z);
+  r = vd3_add(r, vd3_s_mul(segdiffr, OO_LW_SEGMENT_LEN));
   return r;
 }
 
-float3
+double3
 lwc_dist(const lwcoord_t *a, const lwcoord_t * b)
 {
-  float3 diff = vf3_sub(a->offs, b->offs);
+  double3 diff = vd3_sub(a->offs, b->offs);
   long3 segdiff = a->seg - b->seg;
-  float3 segdiffr = vf3_set((float)segdiff.x,
-                            (float)segdiff.y,
-                            (float)segdiff.z);
+  double3 segdiffr = vd3_set((double)segdiff.x,
+                             (double)segdiff.y,
+                             (double)segdiff.z);
 
-  return vf3_add(diff, vf3_s_mul(segdiffr, OO_LW_SEGMENT_LEN));
+  return vd3_add(diff, vd3_s_mul(segdiffr, OO_LW_SEGMENT_LEN));
 }
 
 
 int
 lwc_octant(const lwcoord_t *a, const lwcoord_t * b)
 {
-  float3 rel = lwc_dist(b, a);
+  double3 rel = lwc_dist(b, a);
 
   int octant = 0;
-  octant = vf3_octant(vf3_set(0, 0, 0), rel);
+  octant = vd3_octant(vd3_set(0, 0, 0), rel);
   return octant;
 }
 

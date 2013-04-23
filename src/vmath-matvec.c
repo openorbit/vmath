@@ -52,6 +52,18 @@ vf3_outprod(float3x3 m, float3 a, float3 b) {
   m[2] = vf3_mul(m[2], b);
 }
 
+void
+vd3_outprod(double3x3 m, double3 a, double3 b) {
+  m[0] = vd3_set(a.x, a.x, a.x);
+  m[1] = vd3_set(a.y, a.y, a.y);
+  m[2] = vd3_set(a.z, a.z, a.z);
+
+  m[0] = vd3_mul(m[0], b);
+  m[1] = vd3_mul(m[1], b);
+  m[2] = vd3_mul(m[2], b);
+}
+
+
 /* standard non vectorised routines */
 
 #ifndef VM_V4_NEG
@@ -116,6 +128,21 @@ mf4_v_mul(const float4x4 a, float4 v) {
   return res;
 }
 
+double4
+md4_v_mul(const double4x4 a, double4 v)
+{
+  double4 res;
+#if __has_feature(attribute_ext_vector_type)
+  res.x = vd4_dot(a[0], v);
+  res.y = vd4_dot(a[1], v);
+  res.z = vd4_dot(a[2], v);
+  res.w = vd4_dot(a[3], v);
+#else
+#error "not implemented"
+#endif
+  return res;
+}
+
 
 void
 mf3_add(float3x3 a, const float3x3 b, const float3x3 c)
@@ -133,6 +160,14 @@ mf3_add2(float3x3 a, const float3x3 b)
   a[2] += b[2];
 }
 
+void
+md3_add2(double3x3 a, const double3x3 b)
+{
+  a[0] += b[0];
+  a[1] += b[1];
+  a[2] += b[2];
+}
+
 
 void
 mf3_sub(float3x3 a, const float3x3 b, const float3x3 c)
@@ -143,9 +178,27 @@ mf3_sub(float3x3 a, const float3x3 b, const float3x3 c)
 }
 
 void
+md3_sub(double3x3 a, const double3x3 b, const double3x3 c)
+{
+  a[0] = b[0] - c[0];
+  a[1] = b[1] - c[1];
+  a[2] = b[2] - c[2];
+}
+
+
+void
 mf3_s_mul(float3x3 res, const float3x3 m, float s)
 {
   float3 v = vf3_set(s, s, s);
+  res[0] = m[0] * v;
+  res[1] = m[1] * v;
+  res[2] = m[2] * v;
+}
+
+void
+md3_s_mul(double3x3 res, const double3x3 m, double s)
+{
+  double3 v = vd3_set(s, s, s);
   res[0] = m[0] * v;
   res[1] = m[1] * v;
   res[2] = m[2] * v;
@@ -309,8 +362,8 @@ m_lu(const float4x4 a, float4x4 l, float4x4 u)
 float4
 v_normalise(float4 v)
 {
-    float norm = vf4_abs(v);
-    return vf4_s_mul(v, 1.0f/norm);
+  float norm = vf4_abs(v);
+  return vf4_s_mul(v, 1.0f/norm);
 }
 
 float
@@ -649,6 +702,13 @@ mf4_colvec(const float4x4 m, int col)
   return vf4_set(m[0][col], m[1][col], m[2][col], m[3][col]);
 }
 
+double4
+md4_colvec(const double4x4 m, int col)
+{
+  return vd4_set(m[0][col], m[1][col], m[2][col], m[3][col]);
+}
+
+
 void
 mf4_set_colvec(const float4x4 m, int col, float4 v)
 {
@@ -657,6 +717,16 @@ mf4_set_colvec(const float4x4 m, int col, float4 v)
   m[2][col] = v.z;
   m[3][col] = v.w;
 }
+
+void
+md4_set_colvec(const double4x4 m, int col, double4 v)
+{
+  m[0][col] = v.x;
+  m[1][col] = v.y;
+  m[2][col] = v.z;
+  m[3][col] = v.w;
+}
+
 
 void
 mf4_transpose1(float4x4 a)
@@ -681,6 +751,18 @@ mf4_transpose2(float4x4 a, const float4x4 b)
     a[i] = mf4_colvec(b, i);
   }
 }
+
+void
+md4_transpose2(double4x4 a, const double4x4 b)
+{
+#if ! __has_feature(attribute_ext_vector_type)
+#error "Compiler must support clang ext vectors"
+#endif
+  for (int i = 0 ; i < 4 ; ++ i) {
+    a[i] = md4_colvec(b, i);
+  }
+}
+
 
 void
 mf3_mul2(float3x3 a, const float3x3 b)
@@ -769,6 +851,18 @@ mf3_det(const float3x3 m)
          m[2][2]*m[1][0]*m[0][1];
 }
 
+double
+md3_det(const double3x3 m)
+{
+  return m[0][0]*m[1][1]*m[2][2] +
+         m[0][1]*m[1][2]*m[2][0] +
+         m[0][2]*m[1][0]*m[2][1] -
+         m[2][0]*m[1][1]*m[0][2] -
+         m[2][1]*m[1][2]*m[0][0] -
+         m[2][2]*m[1][0]*m[0][1];
+}
+
+
 
 void
 mf3_adj(float3x3 adjMat, const float3x3 m)
@@ -786,6 +880,24 @@ mf3_adj(float3x3 adjMat, const float3x3 m)
   adjMat[2][1] = -(m[0][0]*m[2][1] - m[0][1]*m[2][0]);
   adjMat[2][2] = m[0][0]*m[1][1] - m[0][1]*m[1][0];
 }
+
+void
+md3_adj(double3x3 adjMat, const double3x3 m)
+{
+  // TODO: Can we vectorise this?
+  adjMat[0][0] = m[1][1]*m[2][2] - m[1][2]*m[2][1];
+  adjMat[0][1] = -(m[0][1]*m[2][2] - m[0][2]*m[2][1]);
+  adjMat[0][2] = m[0][1]*m[1][2] - m[0][2]*m[1][1];
+
+  adjMat[1][0] = -(m[1][0]*m[2][2] - m[1][2]*m[2][0]);
+  adjMat[1][1] = m[0][0]*m[2][2] - m[0][2]*m[2][0];
+  adjMat[1][2] = -(m[0][0]*m[1][2] - m[0][2]*m[1][0]);
+
+  adjMat[2][0] = m[1][0]*m[2][1] - m[1][1]*m[2][0];
+  adjMat[2][1] = -(m[0][0]*m[2][1] - m[0][1]*m[2][0]);
+  adjMat[2][2] = m[0][0]*m[1][1] - m[0][1]*m[1][0];
+}
+
 
 void
 mf3_inv2(float3x3 invmat, const float3x3 mat)
@@ -808,6 +920,29 @@ mf3_inv2(float3x3 invmat, const float3x3 mat)
     }
   }
 }
+
+void
+md3_inv2(double3x3 invmat, const double3x3 mat)
+{
+  // Very brute force, there are more efficient ways to do this
+  double det = md3_det(mat);
+  double3 reprDetVec = vd3_repr(vd3_set(det, det, det));
+  double3x3 M_adj;
+  md3_adj(M_adj, mat);
+
+  if (det != 0.0f) {
+    for (int i = 0 ; i < 3 ; i ++) {
+      invmat[i] = vd3_mul(M_adj[i], reprDetVec);
+    }
+  } else {
+    // If the determinant is zero, then the matrix is not invertible
+    // thus, return NANs in all positions
+    for (int i = 0; i < 3; i ++) {
+      invmat[i] = vd3_set(NAN, NAN, NAN);
+    }
+  }
+}
+
 
 void
 mf3_inv1(float3x3 mat)
@@ -842,6 +977,16 @@ mf3_ident(float3x3 m)
 }
 
 void
+md3_ident(double3x3 m)
+{
+  memset(m, 0, sizeof(double3x3));
+  m[0][0] = 1.0;
+  m[1][1] = 1.0;
+  m[2][2] = 1.0;
+}
+
+
+void
 mf4_ident(float4x4 m)
 {
   memset(m, 0, sizeof(float4x4));
@@ -849,6 +994,16 @@ mf4_ident(float4x4 m)
   m[1][1] = 1.0f;
   m[2][2] = 1.0f;
   m[3][3] = 1.0f;
+}
+
+void
+md4_ident(double4x4 m)
+{
+  memset(m, 0, sizeof(double4x4));
+  m[0][0] = 1.0;
+  m[1][1] = 1.0;
+  m[2][2] = 1.0;
+  m[3][3] = 1.0;
 }
 
 void
@@ -860,6 +1015,17 @@ mf4_ident_z_up(float4x4 m)
   m[2][0] = 1.0f;
   m[3][3] = 1.0f;
 }
+
+void
+md4_ident_z_up(double4x4 m)
+{
+  memset(m, 0, sizeof(double4x4));
+  m[0][1] = 1.0;
+  m[1][2] = 1.0;
+  m[2][0] = 1.0;
+  m[3][3] = 1.0;
+}
+
 
 
 bool
@@ -900,6 +1066,16 @@ mf3_basis(float3x3 res, const float3x3 m, const float3x3 b)
 }
 
 void
+md3_basis(double3x3 res, const double3x3 m, const double3x3 b)
+{
+  //res = b * m * inv(b)
+  double3x3 binv;
+  md3_transpose2(binv, b); // Inverse is the transpose for a rotation matrix
+  md3_mul3(res, b, m);
+  md3_mul2(res, binv);
+}
+
+void
 mf4_cpy(float4x4 a, const float4x4 b)
 {
   memcpy(a, b, sizeof(float4x4));
@@ -931,6 +1107,27 @@ mf4_mul2(float4x4 a, const float4x4 b)
     }
   }
 }
+
+void
+md4_mul2(double4x4 a, const double4x4 b)
+{
+  double4x4 atmp;
+  double4x4 btransp;
+
+  md4_cpy(atmp, a);
+  md4_transpose2(btransp, b);
+
+  for (int i = 0 ; i < 4 ; ++ i) {
+    for (int j = 0 ; j < 4 ; ++ j) {
+#if __has_feature(attribute_ext_vector_type)
+      a[i][j] = vd4_dot(atmp[i], btransp[j]);
+#else
+#error "Please fix for non clang compiler"
+#endif
+    }
+  }
+}
+
 
 void
 mf4_mul3(float4x4 a, const float4x4 b, const float4x4 c)
@@ -1004,6 +1201,19 @@ mf4_perspective(float4x4 m,
                  (2.0f*zFar*zNear)/(zNear-zFar));
   m[3] = vf4_set(0.0f, 0.0f, -1.0f, 0.0f);
 }
+
+void
+md4_perspective(double4x4 m,
+                double fovy, double aspect, double zNear, double zFar)
+{
+  double f = 1.0/tan(fovy/2.0); // Cotan
+  m[0] = vd4_set(f/aspect, 0.0, 0.0, 0.0);
+  m[1] = vd4_set(0.0, f, 0.0, 0.0);
+  m[2] = vd4_set(0.0, 0.0, (zFar+zNear)/(zNear-zFar),
+                 (2.0*zFar*zNear)/(zNear-zFar));
+  m[3] = vd4_set(0.0, 0.0, -1.0, 0.0);
+}
+
 
 void
 mf4_frustum(float4x4 m,

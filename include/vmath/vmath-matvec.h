@@ -57,6 +57,7 @@ extern "C" {
   //#include <vmath/vmath-matvec.inl>
 
 void vf3_outprod(float3x3 m, float3 a, float3 b);
+void vd3_outprod(double3x3 m, double3 a, double3 b);
 
 static inline float
 vf3_x(float3 v)
@@ -208,6 +209,18 @@ vf4_setv(float3 vec, float w)
 #endif
 }
 
+static inline double4
+vd4_setv(double3 vec, float w)
+{
+#if __has_feature(attribute_ext_vector_type)
+  double4 v = {vec.x, vec.y, vec.z, w};
+  return v;
+#else
+  #error "not implemented"
+#endif
+  }
+
+
 static inline float
 vf3_get(float3 v, short i)
 {
@@ -288,6 +301,13 @@ vf4_abs(float4 v)
 {
   float4 res = v * v;
   return sqrtf(res.x + res.y + res.z + res.w);
+}
+
+static inline double
+vd4_abs(double4 v)
+{
+  double4 res = v * v;
+  return sqrt(res.x + res.y + res.z + res.w);
 }
 
 
@@ -419,6 +439,14 @@ vf4_add(float4 a, float4 b)
   return a + b;
 }
 
+static inline double4
+vd4_add(double4 a, double4 b)
+{
+  return a + b;
+}
+
+
+
 static inline double3
 vd3_add(double3 a, double3 b)
 {
@@ -466,6 +494,14 @@ vf3_repr(float3 a)
   return ones / a;
 }
 
+static inline double3
+vd3_repr(double3 a)
+{
+  double3 ones = vd3_set(1.0, 1.0, 1.0);
+  return ones / a;
+}
+
+
 static inline float4
 vf4_sub(float4 a, float4 b)
 {
@@ -480,6 +516,12 @@ vd3_sub(double3 a, double3 b)
 
 static inline float3
 vf3_mul(float3 a, float3 b)
+{
+  return a * b;
+}
+
+static inline double3
+vd3_mul(double3 a, double3 b)
 {
   return a * b;
 }
@@ -505,13 +547,20 @@ vd3_s_mul(double3 a, double b)
   return a * bv;
 }
 
-
 static inline float4
 vf4_s_mul(float4 a, float b)
 {
   float4 bv = vf4_set(b,b,b,b);
   return a * bv;
 }
+
+static inline double4
+vd4_s_mul(double4 a, float b)
+{
+  double4 bv = vd4_set(b,b,b,b);
+  return a * bv;
+}
+
 
 static inline float3
 vf3_s_div(float3 a, float b)
@@ -538,9 +587,7 @@ vf4_s_div(float4 a, float b)
 static inline double3
 vd3_abs_c(double3 a)
 {
-  double3_u ua = {.v = a};
-
-  double3 absa = vd3_set(fabs(ua.a[0]), fabs(ua.a[1]), fabs(ua.a[2]));
+  double3 absa = vd3_set(fabs(a.x), fabs(a.y), fabs(a.z));
   return absa;
 }
 
@@ -566,6 +613,11 @@ float mf4_subdet3(const float4x4 m, int k, int l);
 void mf4_inv(float4x4 M_inv, const float4x4 M);
 
 float mf3_det(const float3x3 m);
+double md3_det(const double3x3 m);
+
+void mf3_adj(float3x3 adjMat, const float3x3 m);
+void md3_adj(double3x3 adjMat, const double3x3 m);
+
 
 
 /* creates rotation matrices, these are untested and might not work */
@@ -618,6 +670,13 @@ vf3_gt(float3 a, float3 b)
   return vf3_abs_square(a) > vf3_abs_square(b);
 }
 
+static inline bool
+vd3_gt(double3 a, double3 b)
+{
+  return vd3_abs_square(a) > vd3_abs_square(b);
+}
+
+
 
 /*! Compares two matrices for elementvise equality, with a given absolute
  *  tolerance */
@@ -634,12 +693,28 @@ vf3_normalise(float3 v)
   return vf3_s_mul(v, 1.0f/norm);
 }
 
+static inline float4
+vf4_normalise(float4 v)
+{
+  float norm = vf4_abs(v);
+  return vf4_s_mul(v, 1.0f/norm);
+}
+
+
 static inline double3
 vd3_normalise(double3 v)
 {
   double norm = vd3_abs(v);
   return vd3_s_mul(v, 1.0/norm);
 }
+
+static inline double4
+vd4_normalise(double4 v)
+{
+  double norm = vd4_abs(v);
+  return vd4_s_mul(v, 1.0/norm);
+}
+
 
 static inline void
 m_s_mul(float4x4 res, const float4x4 a, float s)
@@ -652,7 +727,9 @@ m_s_mul(float4x4 res, const float4x4 a, float s)
 }
 
 void mf3_ident(float3x3 m);
+void md3_ident(double3x3 m);
 void mf3_add2(float3x3 a, const float3x3 b);
+void md3_add2(double3x3 a, const double3x3 b);
 void mf3_add(float3x3 a, const float3x3 b, const float3x3 c);
 
 void mf3_cpy(float3x3 dst, const float3x3 src);
@@ -668,26 +745,42 @@ void md3_mul2(double3x3 a, const double3x3 b);
 void mf3_mul3(float3x3 a, const float3x3 b, const float3x3 c);
 void md3_mul3(double3x3 a, const double3x3 b, const double3x3 c);
 void mf3_inv2(float3x3 invmat, const float3x3 mat);
+void md3_inv2(double3x3 invmat, const double3x3 mat);
 void mf3_inv1(float3x3 mat);
 void mf3_sub(float3x3 a, const float3x3 b, const float3x3 c);
+void md3_sub(double3x3 a, const double3x3 b, const double3x3 c);
 void mf3_s_mul(float3x3 res, const float3x3 m, float s);
+void md3_s_mul(double3x3 res, const double3x3 m, double s);
 
 void mf3_basis(float3x3 res, const float3x3 m, const float3x3 b);
+void md3_basis(double3x3 res, const double3x3 m, const double3x3 b);
 
 void mf4_set_colvec(const float4x4 m, int col, float4 v);
 float4 mf4_colvec(const float4x4 m, int col);
+
+void md4_set_colvec(const double4x4 m, int col, double4 v);
+double4 md4_colvec(const double4x4 m, int col);
+
 
 void mf4_transpose1(float4x4 a);
 void mf4_transpose2(float4x4 a, const float4x4 b);
 
 float4 mf4_v_mul(const float4x4 a, float4 v);
+double4 md4_v_mul(const double4x4 a, double4 v);
 
 void mf4_ident(float4x4 m);
+void md4_ident(double4x4 m);
 void mf4_ident_z_up(float4x4 m);
+void md4_ident_z_up(double4x4 m);
 
 void mf4_cpy(float4x4 a, const float4x4 b);
+void md4_cpy(double4x4 a, const double4x4 b);
+
 void mf4_mul2(float4x4 a, const float4x4 b);
 void mf4_mul3(float4x4 a, const float4x4 b, const float4x4 c);
+
+void md4_mul2(double4x4 a, const double4x4 b);
+
 
 void mf4_add(float4x4 a, const float4x4 b, const float4x4 c);
 
@@ -704,6 +797,15 @@ mf4_make_translate(float4x4 a, float3 v)
   float4 v2 = {v.x, v.y, v.z, 1.0f};
   mf4_set_colvec(a, 3, v2);
 }
+
+static inline void
+md4_make_translate(double4x4 a, double3 v)
+{
+  md4_ident(a);
+  double4 v2 = {v.x, v.y, v.z, 1.0};
+  md4_set_colvec(a, 3, v2);
+}
+
 
 void mf4_make_rotate(float4x4 m, float rads, float3 v);
 
@@ -740,6 +842,10 @@ void mf4_fustum(float4x4 m,
 /*! Create perspective correction matrix the easy way */
 void mf4_perspective(float4x4 m,
                      float fovy, float aspect, float zNear, float zFar);
+
+void md4_perspective(double4x4 m,
+                     double fovy, double aspect, double zNear, double zFar);
+
 
 /*! Create matrix that point the camera at a specific position. */
 void mf4_lookat(float4x4 m,

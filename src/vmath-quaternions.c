@@ -1,5 +1,5 @@
 /*
- Copyright 2006 Mattias Holm <mattias.holm(at)openorbit.org>
+ Copyright 2006,2013 Mattias Holm <lorrden(at)openorbit.org>
  
  This file is part of Open Orbit. Open Orbit is free software: you can
  redistribute it and/or modify it under the terms of the GNU General Public
@@ -45,48 +45,78 @@
 #include <assert.h>
 
 float
-q_scalar(quaternion_t q)
+qf_scalar(quatf_t q)
 {
 #if __has_feature(attribute_ext_vector_type)
   return q.w;
 #else
-  float4_u qu = {.v = q};
-  return qu.s.w;
+  #error "not implemented"
 #endif
 }
 
+double
+qd_scalar(quatd_t q)
+{
+#if __has_feature(attribute_ext_vector_type)
+  return q.w;
+#else
+  #error "not implemented"
+#endif
+}
+
+
 float3
-v_q_rot(float3 v, quaternion_t q)
+vf3_qf_rot(float3 v, quatf_t q)
 {
   float3x3 m;
-  q_mf3_convert(m, q);
+  qf_mf3_convert(m, q);
 
   float3 res = mf3_v_mul(m, v);
   return res;
 }
 
+double3
+vd3_qd_rot(double3 v, quatd_t q)
+{
+  double3x3 m;
+  qd_md3_convert(m, q);
+
+  double3 res = md3_v_mul(m, v);
+  return res;
+}
+
+
 float3
-q_vector(quaternion_t q)
+qf_vector(quatf_t q)
 {
 #if __has_feature(attribute_ext_vector_type)
   float3 r = {q.x, q.y, q.z};
   return r;
 #else
-  float4_u qu = {.v = q};
-  float3_u ru = {.s.x = qu.s.x, .s.y = qu.s.y, .s.z = qu.s.z};
-  return ru.v;
+#error "not implemented"
 #endif
-
 }
 
+double3
+qd_vector(quatd_t q)
+{
+#if __has_feature(attribute_ext_vector_type)
+  double3 r = {q.x, q.y, q.z};
+  return r;
+#else
+#error "not implemented"
+#endif
+}
+
+
 void
-q_mf3_convert(float3x3 m, quaternion_t q)
+qf_mf3_convert(float3x3 m, quatf_t q)
 {
 #if ! __has_feature(attribute_ext_vector_type)
 #error "clang extended vector attributes required"
 #endif
 
-  float n = q_dot(q, q);
+  float n = qf_dot(q, q);
   float a = (n > 0.0f) ? 2.0f / n : 0.0f;
 
   float xa = q.x*a, ya = q.y*a, za = q.z*a;
@@ -101,13 +131,35 @@ q_mf3_convert(float3x3 m, quaternion_t q)
 
 
 void
-q_mf4_convert(float4x4 m, quaternion_t q)
+qd_md3_convert(double3x3 m, quatd_t q)
 {
 #if ! __has_feature(attribute_ext_vector_type)
 #error "clang extended vector attributes required"
 #endif
 
-  float n = q_dot(q, q);
+  double n = qd_dot(q, q);
+  double a = (n > 0.0) ? 2.0 / n : 0.0;
+
+  double xa = q.x*a, ya = q.y*a, za = q.z*a;
+  double xx = q.x*xa, xy = q.x*ya, xz = q.x*za;
+  double yy = q.y*ya, yz = q.y*za, zz = q.z*za;
+  double wx = q.w*xa, wy = q.w*ya, wz = q.w*za;
+
+  m[0] = vd3_set(1.0-(yy+zz), xy-wz, xz+wy);
+  m[1] = vd3_set(xy+wz, 1.0-(xx+zz), yz-wx);
+  m[2] = vd3_set(xz-wy, yz+wx, 1.0-(xx+yy));
+}
+
+
+
+void
+qf_mf4_convert(float4x4 m, quatf_t q)
+{
+#if ! __has_feature(attribute_ext_vector_type)
+#error "clang extended vector attributes required"
+#endif
+
+  float n = qf_dot(q, q);
   float a = (n > 0.0f) ? 2.0f / n : 0.0f;
 
   float xa = q.x*a, ya = q.y*a, za = q.z*a;
@@ -121,14 +173,37 @@ q_mf4_convert(float4x4 m, quaternion_t q)
   m[3] = vf4_set(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
+
 void
-q_mf4_convert_inv(float4x4 m, quaternion_t q)
+qd_md4_convert(double4x4 m, quatd_t q)
 {
 #if ! __has_feature(attribute_ext_vector_type)
 #error "clang extended vector attributes required"
 #endif
 
-  float n = q_dot(q, q);
+  double n = qd_dot(q, q);
+  double a = (n > 0.0) ? 2.0 / n : 0.0;
+
+  double xa = q.x*a, ya = q.y*a, za = q.z*a;
+  double xx = q.x*xa, xy = q.x*ya, xz = q.x*za;
+  double yy = q.y*ya, yz = q.y*za, zz = q.z*za;
+  double wx = q.w*xa, wy = q.w*ya, wz = q.w*za;
+
+  m[0] = vd4_set(1.0-(yy+zz), xy-wz, xz+wy, 0.0);
+  m[1] = vd4_set(xy+wz, 1.0-(xx+zz), yz-wx, 0.0);
+  m[2] = vd4_set(xz-wy, yz+wx, 1.0-(xx+yy), 0.0);
+  m[3] = vd4_set(0.0, 0.0, 0.0, 1.0);
+}
+
+
+void
+qf_mf4_convert_inv(float4x4 m, quatf_t q)
+{
+#if ! __has_feature(attribute_ext_vector_type)
+#error "clang extended vector attributes required"
+#endif
+
+  float n = qf_dot(q, q);
   float a = (n > 0.0f) ? 2.0f / n : 0.0f;
 
   float xa = q.x*a, ya = q.y*a, za = q.z*a;
@@ -143,13 +218,35 @@ q_mf4_convert_inv(float4x4 m, quaternion_t q)
 }
 
 void
-q_mf3_convert_inv(float3x3 m, quaternion_t q)
+qd_md4_convert_inv(double4x4 m, quatd_t q)
 {
 #if ! __has_feature(attribute_ext_vector_type)
 #error "clang extended vector attributes required"
 #endif
 
-  float n = q_dot(q, q);
+  double n = qd_dot(q, q);
+  double a = (n > 0.0f) ? 2.0f / n : 0.0f;
+
+  double xa = q.x*a, ya = q.y*a, za = q.z*a;
+  double xx = q.x*xa, xy = q.x*ya, xz = q.x*za;
+  double yy = q.y*ya, yz = q.y*za, zz = q.z*za;
+  double wx = q.w*xa, wy = q.w*ya, wz = q.w*za;
+
+  m[0] = vd4_set(1.0-(yy+zz), xy+wz, xz-wy, 0.0);
+  m[1] = vd4_set(xy-wz, 1.0-(xx+zz), yz+wx, 0.0);
+  m[2] = vd4_set(xz+wy, yz-wx, 1.0-(xx+yy), 0.0);
+  m[3] = vd4_set(0.0, 0.0, 0.0, 1.0);
+}
+
+
+void
+qf_mf3_convert_inv(float3x3 m, quatf_t q)
+{
+#if ! __has_feature(attribute_ext_vector_type)
+#error "clang extended vector attributes required"
+#endif
+
+  float n = qf_dot(q, q);
   float a = (n > 0.0f) ? 2.0f / n : 0.0f;
 
   float xa = q.x*a, ya = q.y*a, za = q.z*a;
@@ -162,17 +259,37 @@ q_mf3_convert_inv(float3x3 m, quaternion_t q)
   m[2] = vf3_set(xz+wy, yz-wx, 1.0f-(xx+yy));
 }
 
+void
+qd_md3_convert_inv(double3x3 m, quatd_t q)
+{
+#if ! __has_feature(attribute_ext_vector_type)
+#error "clang extended vector attributes required"
+#endif
 
-quaternion_t
-q_slerp(quaternion_t q0, quaternion_t q1, float t)
+  double n = qd_dot(q, q);
+  double a = (n > 0.0) ? 2.0 / n : 0.0;
+
+  double xa = q.x*a, ya = q.y*a, za = q.z*a;
+  double xx = q.x*xa, xy = q.x*ya, xz = q.x*za;
+  double yy = q.y*ya, yz = q.y*za, zz = q.z*za;
+  double wx = q.w*xa, wy = q.w*ya, wz = q.w*za;
+
+  m[0] = vd3_set(1.0-(yy+zz), xy+wz, xz-wy);
+  m[1] = vd3_set(xy-wz, 1.0-(xx+zz), yz+wx);
+  m[2] = vd3_set(xz+wy, yz-wx, 1.0-(xx+yy));
+}
+
+
+quatf_t
+qf_slerp(quatf_t q0, quatf_t q1, float t)
 {
   // See http://en.wikipedia.org/wiki/Slerp
   if (t >= 1.0) return q1;
   if (t <= 0.0) return q0;
 
-  float qdot = q_dot(q0, q1);
+  float qdot = qf_dot(q0, q1);
 
-  quaternion_t q1prim;
+  quatf_t q1prim;
   if (qdot < 0.0) {
     q1prim = -q1;
     qdot = -qdot;
@@ -190,7 +307,41 @@ q_slerp(quaternion_t q0, quaternion_t q1, float t)
   float s1 = sin(t*qang) / sin(qang);
 
   if (qang) { // If slerping between the same points, qang will be 0, so s0 will be NaN or Inf.
-    quaternion_t res = s0 * q0 + s1 * q1prim;
+    quatf_t res = s0 * q0 + s1 * q1prim;
+    return res;
+  }
+
+  return q0;
+}
+
+quatd_t
+qd_slerp(quatd_t q0, quatd_t q1, double t)
+{
+  // See http://en.wikipedia.org/wiki/Slerp
+  if (t >= 1.0) return q1;
+  if (t <= 0.0) return q0;
+
+  double qdot = qd_dot(q0, q1);
+
+  quatd_t q1prim;
+  if (qdot < 0.0) {
+    q1prim = -q1;
+    qdot = -qdot;
+  } else {
+    q1prim = q1;
+  }
+
+  if (qdot < -1.0)  qdot = -1.0;
+  if (qdot > 1.0)  qdot = 1.0;
+  assert(qdot >= -1.0);
+  assert(qdot <= 1.0);
+
+  double qang = acos(qdot);
+  double s0 = sin((1.0-t)*qang) / sin(qang);
+  double s1 = sin(t*qang) / sin(qang);
+
+  if (qang) { // If slerping between the same points, qang will be 0, so s0 will be NaN or Inf.
+    quatd_t res = s0 * q0 + s1 * q1prim;
     return res;
   }
 
@@ -198,10 +349,11 @@ q_slerp(quaternion_t q0, quaternion_t q1, float t)
 }
 
 
-quaternion_t
-mf3_q_convert(float3x3 m)
+
+quatf_t
+mf3_qf_convert(float3x3 m)
 {
-  quaternion_t q;
+  quatf_t q;
   float tr, s;
 
   tr = m[0][0] + m[1][1] + m[2][2];
@@ -214,7 +366,7 @@ mf3_q_convert(float3x3 m)
     q.y = (m[0][2] - m[2][0]) * s;
     q.z = (m[1][0] - m[0][1]) * s;
   } else if (m[0][0] > m[1][1] && m[0][0] > m[2][2]) {
-    s =  .0f * sqrtf(m[0][0] - m[1][1] - m[2][2] + 1.0f);
+    s =  2.0f * sqrtf(m[0][0] - m[1][1] - m[2][2] + 1.0f);
     q.x = 0.25f * s;
     q.y = (m[0][1] + m[1][0] ) / s;
     q.z = (m[0][2] + m[2][0] ) / s;
@@ -236,56 +388,122 @@ mf3_q_convert(float3x3 m)
   return q;
 }
 
-
-quaternion_t
-mf4_q_convert(float4x4 m)
+quatd_t
+md3_qd_convert(double3x3 m)
 {
-#if __has_feature(attribute_ext_vector_type)
-  quaternion_t q;
-#define QX(q) q.x
-#define QY(q) q.y
-#define QZ(q) q.z
-#define QW(q) q.w
+  quatd_t q;
+  double tr, s;
 
-#define QIDX(q, i) q[i]
+  tr = m[0][0] + m[1][1] + m[2][2];
 
-#else
-  float4_u q;
+  if (tr >= 0.0f) {
+    s = sqrtf(tr+1.0);
+    q.w = s*0.5;
+    s = 0.5 / s;
+    q.x = (m[2][1] - m[1][2]) * s;
+    q.y = (m[0][2] - m[2][0]) * s;
+    q.z = (m[1][0] - m[0][1]) * s;
+  } else if (m[0][0] > m[1][1] && m[0][0] > m[2][2]) {
+    s =  2.0 * sqrt(m[0][0] - m[1][1] - m[2][2] + 1.0);
+    q.x = 0.25 * s;
+    q.y = (m[0][1] + m[1][0] ) / s;
+    q.z = (m[0][2] + m[2][0] ) / s;
+    q.w = (m[2][1] - m[1][2] ) / s;
+  } else if (m[1][1] > m[2][2]) {
+    s = 2.0 * sqrt(m[1][1] - m[0][0] - m[2][2] + 1.0);
+    q.x = (m[0][1] + m[1][0] ) / s;
+    q.y = 0.25f * s;
+    q.z = (m[1][2] + m[2][1] ) / s;
+    q.w = (m[0][2] - m[2][0] ) / s;
+  } else {
+    s = 2.0 * sqrt(m[2][2] - m[0][0] - m[1][1] + 1.0);
+    q.x = (m[0][2] + m[2][0]) / s;
+    q.y = (m[1][2] + m[2][1]) / s;
+    q.z = 0.25f * s;
+    q.w = (m[1][0] - m[0][1]) / s;
+  }
 
-#define QX(q) q.s.x
-#define QY(q) q.s.y
-#define QZ(q) q.s.z
-#define QW(q) q.s.w
+  return q;
+}
 
-#define QIDX(q, i) q.a[i]
 
-#endif
+
+quatf_t
+mf4_qf_convert(float4x4 m)
+{
+  quatf_t q;
 
   float tr, s;
   tr = m[0][0] + m[1][1] + m[2][2];
   if (tr >= 0.0f) {
     s = sqrt(tr+m[3][3]);
-    QW(q) = s*0.5;
+    q.w = s*0.5;
     s = 0.5 / s;
-    QX(q) = (m[2][1] - m[1][2]) * s;
-    QY(q) = (m[0][2] - m[2][0]) * s;
-    QZ(q) = (m[1][0] - m[0][1]) * s;
+    q.x = (m[2][1] - m[1][2]) * s;
+    q.y = (m[0][2] - m[2][0]) * s;
+    q.z = (m[1][0] - m[0][1]) * s;
   } else {
     int h = 0;
     if (m[1][1] > m[0][0]) h = 1;
     if (m[2][2] > m[h][h]) h = 2;
     switch (h) {
 #define CASE_MACRO(i,j,k,I,J,K)                             \
-    case I:                                                 \
-      s = sqrt( (m[I][I] - (m[J][J]+m[K][K])) + m[3][3] );  \
-      QIDX(q, i) = s*0.5f;                                  \
-      QIDX(q, j) = (m[I][J] + m[J][I]) * s;                 \
-      QIDX(q, k) = (m[K][I] + m[I][K]) * s;                 \
-      QW(q) = (m[K][J] - m[J][K]) * s;                      \
-      break
-    CASE_MACRO(Q_X, Q_Y, Q_Z, 0, 1, 2);
-    CASE_MACRO(Q_Y, Q_Z, Q_X, 1, 2, 0);
-    CASE_MACRO(Q_Z, Q_X, Q_Y, 2, 0, 1);
+  case I:                                                   \
+    s = sqrt( (m[I][I] - (m[J][J]+m[K][K])) + m[3][3] );    \
+    q[i] = s*0.5;                                           \
+    q[j] = (m[I][J] + m[J][I]) * s;                         \
+    q[k] = (m[K][I] + m[I][K]) * s;                         \
+    q.w = (m[K][J] - m[J][K]) * s;                           \
+    break
+
+        CASE_MACRO(0, 1, 2, 0, 1, 2);
+        CASE_MACRO(1, 2, 0, 1, 2, 0);
+        CASE_MACRO(2, 0, 1, 2, 0, 1);
+#undef CASE_MACRO
+      default:
+        assert(0);
+    }
+  }
+
+  // QUERY: Is the last ref to z correct?
+  if (m[3][3] != 0.0f) {
+    s = 1.0f / sqrt(m[3][3]);
+    q.x *= s; q.y *= s; q.z *= s; //QZ(q) *= s;
+  }
+  return q;
+}
+
+quatd_t
+md4_qd_convert(double4x4 m)
+{
+  quatd_t q;
+
+  double tr, s;
+  tr = m[0][0] + m[1][1] + m[2][2];
+  if (tr >= 0.0f) {
+    s = sqrt(tr+m[3][3]);
+    q.w = s*0.5;
+    s = 0.5 / s;
+    q.x = (m[2][1] - m[1][2]) * s;
+    q.y = (m[0][2] - m[2][0]) * s;
+    q.z = (m[1][0] - m[0][1]) * s;
+  } else {
+    int h = 0;
+    if (m[1][1] > m[0][0]) h = 1;
+    if (m[2][2] > m[h][h]) h = 2;
+    switch (h) {
+#define CASE_MACRO(i,j,k,I,J,K)                           \
+  case I:                                                 \
+    s = sqrt( (m[I][I] - (m[J][J]+m[K][K])) + m[3][3] );  \
+    q[i] = s*0.5;                                         \
+    q[j] = (m[I][J] + m[J][I]) * s;                       \
+    q[k] = (m[K][I] + m[I][K]) * s;                       \
+    q.w = (m[K][J] - m[J][K]) * s;                        \
+    break
+
+    CASE_MACRO(0, 1, 2, 0, 1, 2);
+    CASE_MACRO(1, 2, 0, 1, 2, 0);
+    CASE_MACRO(2, 0, 1, 2, 0, 1);
 #undef CASE_MACRO
     default:
       assert(0);
@@ -295,136 +513,230 @@ mf4_q_convert(float4x4 m)
   // QUERY: Is the last ref to z correct?
   if (m[3][3] != 0.0f) {
     s = 1.0f / sqrt(m[3][3]);
-    QX(q) *= s; QY(q) *= s; QZ(q) *= s; //QZ(q) *= s;
+    q.x *= s; q.y *= s; q.z *= s; //QZ(q) *= s;
   }
-
-#undef QX
-#undef QY
-#undef QZ
-#undef QW
-#undef QIDX
   return q;
 }
 
 
-quaternion_t
-q_add(const quaternion_t a, const quaternion_t b)
+
+
+quatf_t
+qf_add(const quatf_t a, const quatf_t b)
 {
- 	return vf4_add(a, b);
+  return vf4_add(a, b);
 }
 
-quaternion_t
-q_mul(const quaternion_t a, const quaternion_t b)
+quatd_t
+qd_add(const quatd_t a, const quatd_t b)
+{
+  return vd4_add(a, b);
+}
+
+
+quatf_t
+qf_mul(const quatf_t a, const quatf_t b)
 {
 #if __has_feature(attribute_ext_vector_type)
-	quaternion_t r;
+  quatf_t r;
   r.x = a.x*b.w + a.w*b.x	+ a.y*b.z - a.z*b.y;
   r.y = a.y*b.w + a.w*b.y	+ a.z*b.x - a.x*b.z;
   r.z = a.z*b.w + a.w*b.z	+ a.x*b.y - a.y*b.x;
   r.w = a.w*b.w - a.x*b.x	- a.y*b.y - a.z*b.z;
   return r;
 #else
-  float4_u r;
-  float4_u au = {.v = a}, bu = {.v = b};
-  r.s.x = au.s.x*bu.s.w + au.s.w*bu.s.x	+ au.s.y*bu.s.z - au.s.z*bu.s.y;
-  r.s.y = au.s.y*bu.s.w + au.s.w*bu.s.y	+ au.s.z*bu.s.x - au.s.x*bu.s.z;
-  r.s.z = au.s.z*bu.s.w + au.s.w*bu.s.z	+ au.s.x*bu.s.y - au.s.y*bu.s.x;
-  r.s.w = au.s.w*bu.s.w - au.s.x*bu.s.x	- au.s.y*bu.s.y - au.s.z*bu.s.z;
-  return r.v;
+  #error "not implemented"
 #endif
 }
 
-quaternion_t
-q_s_div(quaternion_t q, float d)
+quatd_t
+qd_mul(const quatd_t a, const quatd_t b)
 {
 #if __has_feature(attribute_ext_vector_type)
-	quaternion_t r;
+  quatd_t r;
+  r.x = a.x*b.w + a.w*b.x	+ a.y*b.z - a.z*b.y;
+  r.y = a.y*b.w + a.w*b.y	+ a.z*b.x - a.x*b.z;
+  r.z = a.z*b.w + a.w*b.z	+ a.x*b.y - a.y*b.x;
+  r.w = a.w*b.w - a.x*b.x	- a.y*b.y - a.z*b.z;
+  return r;
+#else
+  #error "not implemented"
+#endif
+}
+
+
+quatf_t
+qf_s_div(quatf_t q, float d)
+{
+#if __has_feature(attribute_ext_vector_type)
+  quatf_t r;
   r.x = q.x / d;
   r.y = q.y / d;
   r.z = q.z / d;
   r.w = q.w / d;
   return r;
 #else
-  float di = 1.0f / d;
-  float4_u dvi = {.s.x = di, .s.y = di, .s.z = di, .s.w = di};
-  quaternion_t r = q * dvi.v;
-  return r;
+  #error "not implemented"
 #endif
 }
 
-quaternion_t
-q_s_mul(quaternion_t q, float d)
+quatd_t
+qd_s_div(quatd_t q, double d)
 {
 #if __has_feature(attribute_ext_vector_type)
-	quaternion_t r;
+  quatd_t r;
+  r.x = q.x / d;
+  r.y = q.y / d;
+  r.z = q.z / d;
+  r.w = q.w / d;
+  return r;
+#else
+#error "not implemented"
+#endif
+}
+
+
+quatf_t
+qf_s_mul(quatf_t q, float d)
+{
+#if __has_feature(attribute_ext_vector_type)
+  quatf_t r;
   r = q * d;
   return r;
 #else
-  float4_u dvi = {.s.x = d, .s.y = d, .s.z = d, .s.w = d};
-  quaternion_t r = q * dvi.v;
+#error "not implemented"
+#endif
+}
+
+quatd_t
+qd_s_mul(quatd_t q, double d)
+{
+#if __has_feature(attribute_ext_vector_type)
+  quatd_t r;
+  r = q * d;
   return r;
+#else
+#error "not implemented"
 #endif
 }
 
 
+
+
 float
-q_dot(quaternion_t a, quaternion_t b)
+qf_dot(quatf_t a, quatf_t b)
 {
-    return vf4_dot(a, b);
+  return vf4_dot(a, b);
+}
+
+double
+qd_dot(quatd_t a, quatd_t b)
+{
+  return vd4_dot(a, b);
 }
 
 float3
-q_cross(const quaternion_t a, const quaternion_t b)
+qf_cross(const quatf_t a, const quatf_t b)
 {
-    return vf3_cross(q_vector(a), q_vector(b));
+  return vf3_cross(qf_vector(a), qf_vector(b));
 }
+
+double3
+qd_cross(const quatd_t a, const quatd_t b)
+{
+  return vd3_cross(qd_vector(a), qd_vector(b));
+}
+
 
 float
-q_abs(quaternion_t q)
+qf_abs(quatf_t q)
 {
-  return v_abs(q);
+  return vf4_abs(q);
 }
 
-quaternion_t
-q_conj(const quaternion_t q)
+double
+qd_abs(quatd_t q)
+{
+  return vd4_abs(q);
+}
+
+
+quatf_t
+qf_conj(const quatf_t q)
 {
 #if __has_feature(attribute_ext_vector_type)
-  quaternion_t qp = {-q.x, -q.y, -q.z, q.w};
+  quatf_t qp = {-q.x, -q.y, -q.z, q.w};
   return qp;
 #else
-  float4_u qu = {.v = q};
-	float4_u qp = {.s.x = -qu.s.x, .s.y = -qu.s.y, .s.z = -qu.s.z, .s.w = qu.s.w};
-  return qp.v;
+  #error "not implemented"
 #endif
 }
 
-quaternion_t
-q_repr(const quaternion_t q)
+quatd_t
+qd_conj(const quatd_t q)
 {
-  quaternion_t res;
-  quaternion_t qp;
-  qp = q_conj(q);
-  float d = q_dot(q, q);
-  res = q_s_div(qp, d);
+#if __has_feature(attribute_ext_vector_type)
+  quatd_t qp = {-q.x, -q.y, -q.z, q.w};
+  return qp;
+#else
+#error "not implemented"
+#endif
+}
+
+quatf_t
+qf_repr(const quatf_t q)
+{
+  quatf_t res;
+  quatf_t qp;
+  qp = qf_conj(q);
+  float d = qf_dot(q, q);
+  res = qf_s_div(qp, d);
   return res;
 }
 
-quaternion_t
-q_div(quaternion_t a, quaternion_t b)
+quatd_t
+qd_repr(const quatd_t q)
 {
-  quaternion_t res;
-  quaternion_t br;
-
-  br = q_repr(b);
-
-  res = q_mul(a, br);
+  quatd_t res;
+  quatd_t qp;
+  qp = qd_conj(q);
+  double d = qd_dot(q, q);
+  res = qd_s_div(qp, d);
   return res;
 }
 
-quaternion_t
-q_rotv(float3 axis, float alpha)
+
+quatf_t
+qf_div(quatf_t a, quatf_t b)
 {
-  quaternion_t q;
+  quatf_t res;
+  quatf_t br;
+
+  br = qf_repr(b);
+
+  res = qf_mul(a, br);
+  return res;
+}
+
+
+quatd_t
+qd_div(quatd_t a, quatd_t b)
+{
+  quatd_t res;
+  quatd_t br;
+
+  br = qd_repr(b);
+
+  res = qd_mul(a, br);
+  return res;
+}
+
+
+
+quatf_t
+qf_rotv(float3 axis, float alpha)
+{
+  quatf_t q;
   float Omega = alpha * 0.5;
   float sin_Omega = sin(Omega);
 #if __has_feature(attribute_ext_vector_type)
@@ -433,24 +745,51 @@ q_rotv(float3 axis, float alpha)
   q.z = axis.z * sin_Omega;
   q.w = cos(Omega);
 #else
-  float4_u qu;
-  float3_u axisu = { .v = axis };
-  qu.s.x = axisu.s.x * sin_Omega;
-  qu.s.y = axisu.s.y * sin_Omega;
-  qu.s.z = axisu.s.z * sin_Omega;
-  qu.s.w = cos(Omega);
-  q = qu.v;
+#error "not implemented"
 #endif
-	return q;
+  return q;
 }
-quaternion_t
-q_rot(float x, float y, float z, float alpha)
+
+quatd_t
+qd_rotv(double3 axis, double alpha)
 {
-	float3 axis = {x, y, z};
-	return q_rotv(axis, alpha);
+  quatd_t q;
+  double Omega = alpha * 0.5;
+  double sin_Omega = sin(Omega);
+#if __has_feature(attribute_ext_vector_type)
+  q.x = axis.x * sin_Omega;
+  q.y = axis.y * sin_Omega;
+  q.z = axis.z * sin_Omega;
+  q.w = cos(Omega);
+#else
+#error "not implemented"
+#endif
+  return q;
 }
-quaternion_t
-q_normalise(quaternion_t q)
+
+
+quatf_t
+qf_rot(float x, float y, float z, float alpha)
 {
-    return v_normalise(q);
+  float3 axis = {x, y, z};
+  return qf_rotv(axis, alpha);
+}
+
+quatd_t
+qd_rot(double x, double y, double z, double alpha)
+{
+  double3 axis = {x, y, z};
+  return qd_rotv(axis, alpha);
+}
+
+quatf_t
+qf_normalise(quatf_t q)
+{
+  return vf4_normalise(q);
+}
+
+quatd_t
+qd_normalise(quatd_t q)
+{
+  return vd4_normalise(q);
 }

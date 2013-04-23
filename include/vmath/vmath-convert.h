@@ -57,6 +57,13 @@ vd3_to_vf3(double3 v)
   return vf3_set(v.x, v.y, v.z);
 }
 
+static inline float4
+vd4_to_vf4(double4 v)
+{
+  return vf4_set(v.x, v.y, v.z, v.w);
+}
+
+
 static inline float3
 v3i_to_v3f(int3 iv)
 {
@@ -93,6 +100,15 @@ v3l_to_v3f(long3 lv)
                        (float)v3l_get(lv, 1),
                        (float)v3l_get(lv, 2));
   return res;
+}
+
+
+static inline void
+md4_to_mf4(const double4x4 d, float4x4 f)
+{
+  for (int i = 0 ; i < 4 ; i ++) {
+    f[i] = vd4_to_vf4(d[i]);
+  }
 }
 
 

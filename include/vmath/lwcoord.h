@@ -50,11 +50,11 @@
 
 #include <vmath/vmath.h>
 
-#define OO_LW_SEGMENT_LEN 1024.0f
+#define OO_LW_SEGMENT_LEN 1024.0
 #define OO_LW_SEGMENT_LEN64 1024.0
 
 struct lwcoord_t {
-  float3 offs;
+  double3 offs;
   long3 seg;
 };
 
@@ -69,10 +69,10 @@ void lwc_translate3fv(lwcoord_t *coord, float3 offs);
 void lwc_translate3dv(lwcoord_t *coord, double3 offs);
 
 void lwc_translate3f(lwcoord_t *coord, float dx, float dy, float dz);
-float3 lwc_global(const lwcoord_t *coord);
+double3 lwc_global(const lwcoord_t *coord);
 double3 lwc_globald(const lwcoord_t *coord);
-float3 lwc_relvec(const lwcoord_t *coord, long3 seg);
-float3 lwc_dist(const lwcoord_t *a, const lwcoord_t * b);
+double3 lwc_relvec(const lwcoord_t *coord, long3 seg);
+double3 lwc_dist(const lwcoord_t *a, const lwcoord_t * b);
 void lwc_dump(const lwcoord_t *lwc);
 int lwc_octant(const lwcoord_t *a, const lwcoord_t * b);
 

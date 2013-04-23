@@ -39,8 +39,11 @@
 #define orbit_vmath_cubemap_h
 
 
-float3 v3f_cube_sphere_map(float3 p);
+float3 vf3_cube_sphere_map(float3 p);
 float3 vf3_sphere_cube_map(float3 p);
 
+
+double3 vd3_cube_sphere_map(double3 p);
+double3 vd3_sphere_cube_map(double3 p);
 
 #endif
