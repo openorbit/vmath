@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(vmath)
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(vmath_SRC src/lwcoord.c
               src/vmath-cubemap.c
