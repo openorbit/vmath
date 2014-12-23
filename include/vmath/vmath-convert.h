@@ -127,4 +127,10 @@ geodetic2cart_f(float a, float e,
                 float longitude,
                 float altitude);
 
+double3
+geodetic2cart_d(double a, double e,
+                double latitude,
+                double longitude,
+                double altitude);
+
 #endif /* ! MATH_CONVERT_H__ */

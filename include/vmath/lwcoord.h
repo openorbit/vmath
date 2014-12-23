@@ -76,20 +76,6 @@ double3 lwc_dist(const lwcoord_t *a, const lwcoord_t * b);
 void lwc_dump(const lwcoord_t *lwc);
 int lwc_octant(const lwcoord_t *a, const lwcoord_t * b);
 
-struct lwcoord64_t {
-  double3 offs;
-  long3 seg;
-};
-
-typedef struct lwcoord64_t lwcoord64_t;
-
-void lwc_set64(lwcoord64_t *coord, double x, double y, double z);
-void lwc_normalise64(lwcoord64_t *coord);
-void lwc_translate64(lwcoord64_t *coord, double3 offs);
-double3 lwc_global64(const lwcoord64_t *coord);
-double3 lwc_relvec64(const lwcoord64_t *coord, long3 seg);
-double3 lwc_dist64(const lwcoord64_t *a, const lwcoord64_t * b);
-
-
+double3 lwc_relvec_d3(const lwcoord_t *coord, double3 center);
 
 #endif /* end of include guard: LWCOORD_H_94L1BHQN */

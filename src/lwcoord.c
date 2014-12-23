@@ -197,6 +197,14 @@ lwc_relvec(const lwcoord_t *coord, long3 seg)
 }
 
 double3
+lwc_relvec_d3(const lwcoord_t *coord, double3 center)
+{
+  double3 cordp = lwc_global(coord);
+
+  return vd3_sub(cordp, center);
+}
+
+double3
 lwc_dist(const lwcoord_t *a, const lwcoord_t * b)
 {
   double3 diff = vd3_sub(a->offs, b->offs);
@@ -217,72 +225,4 @@ lwc_octant(const lwcoord_t *a, const lwcoord_t * b)
   int octant = 0;
   octant = vd3_octant(vd3_set(0, 0, 0), rel);
   return octant;
-}
-
-void
-lwc_set64(lwcoord64_t *coord, double x, double y, double z)
-{
-  coord->offs = vd3_set(x, y, z);
-  coord->seg = vl3_set(0, 0, 0);
-
-  lwc_normalise64(coord);
-}
-
-
-void
-lwc_normalise64(lwcoord64_t *coord)
-{
-  if (fabs(coord->offs.x) >= OO_LW_SEGMENT_LEN64) {
-    coord->seg.x += (int64_t) (coord->offs.x / OO_LW_SEGMENT_LEN64);
-    coord->offs.x = fmod(coord->offs.x, OO_LW_SEGMENT_LEN64);
-  }
-  if (fabs(coord->offs.y) >= OO_LW_SEGMENT_LEN64) {
-    coord->seg.y += (int64_t) (coord->offs.y / OO_LW_SEGMENT_LEN64);
-    coord->offs.y = fmod(coord->offs.y, OO_LW_SEGMENT_LEN64);
-  }
-  if (fabs(coord->offs.z) >= OO_LW_SEGMENT_LEN64) {
-    coord->seg.z += (int64_t) (coord->offs.z / OO_LW_SEGMENT_LEN64);
-    coord->offs.z = fmod(coord->offs.z, OO_LW_SEGMENT_LEN64);
-  }
-}
-
-void
-lwc_translate64(lwcoord64_t *coord, double3 offs)
-{
-  coord->offs = vd3_add(coord->offs, offs);
-  lwc_normalise64(coord);
-}
-
-double3
-lwc_global64(const lwcoord64_t *coord)
-{
-  double3 p = coord->offs;
-  double3 seg = v3l_to_v3d(coord->seg);
-  return vd3_add(p, vd3_s_mul(seg, OO_LW_SEGMENT_LEN64));
-}
-
-double3
-lwc_relvec64(const lwcoord64_t *coord, long3 seg)
-{
-  double3 r = coord->offs;
-  long3 segdiff = coord->seg - seg;
-
-  double3 segdiffr = vd3_set((double)v3l_get(segdiff, 0),
-                             (double)v3l_get(segdiff, 1),
-                             (double)v3l_get(segdiff, 2));
-
-  r = vd3_add(r, vd3_s_mul(segdiffr, OO_LW_SEGMENT_LEN64));
-  return r;
-}
-
-double3
-lwc_dist64(const lwcoord64_t *a, const lwcoord64_t * b)
-{
-  double3 diff = vd3_sub(a->offs, b->offs);
-  long3 segdiff = a->seg - b->seg;
-  double3 segdiffr = vd3_set((double)v3l_get(segdiff, 0),
-                             (double)v3l_get(segdiff, 1),
-                             (double)v3l_get(segdiff, 2));
-
-  return vd3_add(diff, vd3_s_mul(segdiffr, OO_LW_SEGMENT_LEN64));
 }

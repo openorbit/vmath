@@ -83,3 +83,18 @@ geodetic2cart_f(float a, float e,
 
   return vf3_set(x, y, z);
 }
+
+double3
+geodetic2cart_d(double a, double e,
+                double latitude,
+                double longitude,
+                double altitude)
+{
+  double xi = sqrt(1.0-e*e*sin(latitude)*sin(latitude));
+  double x = (a / xi + altitude) * cos(latitude) * cos(longitude);
+  double y = (a / xi + altitude) * cos(latitude) * sin(longitude);
+  double z = (a*(1.0-e*e) / xi + altitude) * sin(latitude);
+
+  return vd3_set(x, y, z);
+}
+
